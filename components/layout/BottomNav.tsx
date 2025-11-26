@@ -13,27 +13,21 @@ import {
   Dashboard as DashboardIcon,
   ChecklistRtl as TasksIcon,
   CalendarMonth as CalendarIcon,
-  Settings as SettingsIcon,
+  CenterFocusStrong as FocusIcon,
   Add as AddIcon,
 } from '@mui/icons-material';
 import { useTask } from '@/context/TaskContext';
+import { AppView } from '@/types';
 
-type TabValue = 'dashboard' | 'tasks' | 'calendar' | 'settings';
-
-interface BottomNavProps {
-  activeTab: TabValue;
-  onTabChange: (tab: TabValue) => void;
-}
-
-export default function BottomNav({ activeTab, onTabChange }: BottomNavProps) {
+export default function BottomNav() {
   const theme = useTheme();
-  const { setTaskDialogOpen } = useTask();
+  const { activeView, setActiveView, setTaskDialogOpen } = useTask();
 
-  const handleChange = (_: React.SyntheticEvent, newValue: TabValue | 'add') => {
+  const handleChange = (_: React.SyntheticEvent, newValue: AppView | 'add') => {
     if (newValue === 'add') {
       setTaskDialogOpen(true);
     } else {
-      onTabChange(newValue);
+      setActiveView(newValue);
     }
   };
 
@@ -59,7 +53,7 @@ export default function BottomNav({ activeTab, onTabChange }: BottomNavProps) {
         }}
       >
         <BottomNavigation
-          value={activeTab}
+          value={activeView}
           onChange={handleChange}
           showLabels
           sx={{
@@ -116,14 +110,14 @@ export default function BottomNav({ activeTab, onTabChange }: BottomNavProps) {
             }
           />
           <BottomNavigationAction
+            value="focus"
+            label="Focus"
+            icon={<FocusIcon />}
+          />
+          <BottomNavigationAction
             value="calendar"
             label="Calendar"
             icon={<CalendarIcon />}
-          />
-          <BottomNavigationAction
-            value="settings"
-            label="Settings"
-            icon={<SettingsIcon />}
           />
         </BottomNavigation>
       </Paper>

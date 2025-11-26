@@ -4,6 +4,7 @@ export type Priority = 'low' | 'medium' | 'high' | 'urgent';
 export type TaskStatus = 'todo' | 'in-progress' | 'done' | 'blocked' | 'cancelled';
 export type RecurrenceType = 'daily' | 'weekly' | 'monthly' | 'yearly' | 'custom';
 export type ViewMode = 'list' | 'board' | 'calendar' | 'timeline' | 'matrix';
+export type AppView = 'dashboard' | 'tasks' | 'calendar' | 'events' | 'focus' | 'settings';
 
 export interface Label {
   id: string;
@@ -313,3 +314,34 @@ export interface ProjectTemplate {
   isPublic: boolean;
   createdAt: Date;
 }
+
+// Event Management Types (Luma-style)
+export interface Event {
+  id: string;
+  title: string;
+  description?: string;
+  startTime: Date;
+  endTime: Date;
+  location?: string;
+  url?: string;
+  coverImage?: string;
+  attendees: string[]; // User IDs
+  isPublic: boolean;
+  creatorId: string;
+  createdAt: Date;
+  updatedAt: Date;
+  tags?: string[];
+}
+
+// Focus Mode Types
+export interface FocusSession {
+  id: string;
+  startTime: Date;
+  endTime?: Date;
+  duration: number; // planned duration in minutes
+  actualDuration?: number; // actual duration in minutes
+  taskId?: string;
+  status: 'active' | 'completed' | 'interrupted';
+  notes?: string;
+}
+

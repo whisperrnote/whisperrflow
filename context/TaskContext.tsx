@@ -11,6 +11,7 @@ import {
   TaskStatus,
   Priority,
   ViewMode,
+  AppView,
   Subtask,
   Comment,
 } from '@/types';
@@ -382,6 +383,7 @@ interface TaskState {
   filter: TaskFilter;
   sort: TaskSort;
   viewMode: ViewMode;
+  activeView: AppView;
   isLoading: boolean;
   error: string | null;
   sidebarOpen: boolean;
@@ -402,6 +404,7 @@ const initialState: TaskState = {
     direction: 'asc',
   },
   viewMode: 'list',
+  activeView: 'dashboard',
   isLoading: false,
   error: null,
   sidebarOpen: true,
@@ -428,6 +431,7 @@ type TaskAction =
   | { type: 'SET_FILTER'; payload: TaskFilter }
   | { type: 'SET_SORT'; payload: TaskSort }
   | { type: 'SET_VIEW_MODE'; payload: ViewMode }
+  | { type: 'SET_ACTIVE_VIEW'; payload: AppView }
   | { type: 'TOGGLE_SIDEBAR' }
   | { type: 'SET_SIDEBAR_OPEN'; payload: boolean }
   | { type: 'SET_TASK_DIALOG_OPEN'; payload: boolean }
@@ -541,6 +545,9 @@ function taskReducer(state: TaskState, action: TaskAction): TaskState {
 
     case 'SET_VIEW_MODE':
       return { ...state, viewMode: action.payload };
+
+    case 'SET_ACTIVE_VIEW':
+      return { ...state, activeView: action.payload };
 
     case 'TOGGLE_SIDEBAR':
       return { ...state, sidebarOpen: !state.sidebarOpen };
@@ -667,6 +674,7 @@ interface TaskContextType extends TaskState {
   setFilter: (filter: TaskFilter) => void;
   setSort: (sort: TaskSort) => void;
   setViewMode: (mode: ViewMode) => void;
+  setActiveView: (view: AppView) => void;
   // UI actions
   toggleSidebar: () => void;
   setSidebarOpen: (open: boolean) => void;
@@ -821,6 +829,10 @@ export function TaskProvider({ children }: TaskProviderProps) {
     dispatch({ type: 'SET_VIEW_MODE', payload: mode });
   }, []);
 
+  const setActiveView = useCallback((view: AppView) => {
+    dispatch({ type: 'SET_ACTIVE_VIEW', payload: view });
+  }, []);
+
   // UI
   const toggleSidebar = useCallback(() => {
     dispatch({ type: 'TOGGLE_SIDEBAR' });
@@ -971,6 +983,7 @@ export function TaskProvider({ children }: TaskProviderProps) {
     setFilter,
     setSort,
     setViewMode,
+    setActiveView,
     toggleSidebar,
     setSidebarOpen,
     setTaskDialogOpen,

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Box,
   Tabs,
@@ -13,27 +13,25 @@ import {
   ChecklistRtl as TasksIcon,
   CalendarMonth as CalendarIcon,
   Settings as SettingsIcon,
+  Event as EventIcon,
+  CenterFocusStrong as FocusIcon,
 } from '@mui/icons-material';
 import { TaskList, TaskDialog, TaskDetails, BottomNav } from '@/components';
 import { Dashboard } from '@/components/dashboard';
 import { CalendarView } from '@/components/calendar';
 import { SettingsPanel } from '@/components/settings';
+import FocusMode from '@/components/focus/FocusMode';
+import EventList from '@/components/events/EventList';
 import { useTask } from '@/context/TaskContext';
-
-type TabValue = 'dashboard' | 'tasks' | 'calendar' | 'settings';
+import { AppView } from '@/types';
 
 export default function HomePage() {
   const theme = useTheme();
-  const { selectedTaskId } = useTask();
-  const [activeTab, setActiveTab] = useState<TabValue>('dashboard');
+  const { activeView, setActiveView } = useTask();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
-  const handleTabChange = (_: React.SyntheticEvent, newValue: TabValue) => {
-    setActiveTab(newValue);
-  };
-
-  const handleMobileTabChange = (newValue: TabValue) => {
-    setActiveTab(newValue);
+  const handleTabChange = (_: React.SyntheticEvent, newValue: AppView) => {
+    setActiveView(newValue);
   };
 
   return (
@@ -42,8 +40,10 @@ export default function HomePage() {
       {!isMobile && (
         <Box sx={{ mb: 3 }}>
           <Tabs
-            value={activeTab}
+            value={activeView}
             onChange={handleTabChange}
+            variant="scrollable"
+            scrollButtons="auto"
             sx={{
               '& .MuiTabs-indicator': {
                 height: 3,
@@ -78,6 +78,18 @@ export default function HomePage() {
               iconPosition="start"
             />
             <Tab
+              value="events"
+              label="Events"
+              icon={<EventIcon />}
+              iconPosition="start"
+            />
+            <Tab
+              value="focus"
+              label="Focus"
+              icon={<FocusIcon />}
+              iconPosition="start"
+            />
+            <Tab
               value="settings"
               label="Settings"
               icon={<SettingsIcon />}
@@ -88,11 +100,13 @@ export default function HomePage() {
       )}
 
       {/* Tab Content */}
-      <Box>
-        {activeTab === 'dashboard' && <Dashboard />}
-        {activeTab === 'tasks' && <TaskList />}
-        {activeTab === 'calendar' && <CalendarView />}
-        {activeTab === 'settings' && <SettingsPanel />}
+      <Box sx={{ height: isMobile ? 'calc(100vh - 160px)' : 'auto' }}>
+        {activeView === 'dashboard' && <Dashboard />}
+        {activeView === 'tasks' && <TaskList />}
+        {activeView === 'calendar' && <CalendarView />}
+        {activeView === 'events' && <EventList />}
+        {activeView === 'focus' && <FocusMode />}
+        {activeView === 'settings' && <SettingsPanel />}
       </Box>
 
       {/* Task Dialog */}
@@ -103,7 +117,7 @@ export default function HomePage() {
 
       {/* Mobile Bottom Navigation */}
       {isMobile && (
-        <BottomNav activeTab={activeTab} onTabChange={handleMobileTabChange} />
+        <BottomNav />
       )}
     </>
   );
