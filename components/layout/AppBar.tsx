@@ -39,7 +39,7 @@ import { useThemeMode } from '@/theme';
 // Whisperr ecosystem apps
 const ecosystemApps = [
   { name: 'WhisperrNote', icon: '📝', color: '#6366f1', description: 'Smart notes' },
-  { name: 'WhisperrTask', icon: '✅', color: '#10b981', description: 'Task management', active: true },
+  { name: 'WhisperrFlow', icon: '✅', color: '#10b981', description: 'Flow-based task navigation', active: true },
   { name: 'WhisperrMeet', icon: '🎥', color: '#ec4899', description: 'Video meetings' },
   { name: 'WhisperrEvents', icon: '🎉', color: '#f59e0b', description: 'Event planning' },
   { name: 'WhisperrCal', icon: '📅', color: '#3b82f6', description: 'Calendar' },
@@ -124,7 +124,7 @@ export default function AppBar() {
               display: { xs: 'none', sm: 'block' },
             }}
           >
-            WhisperrTask
+            WhisperrFlow
           </Typography>
         </Box>
 

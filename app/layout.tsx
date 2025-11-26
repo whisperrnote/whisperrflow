@@ -15,13 +15,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "WhisperrTask - Smart Task Management",
-  description: "The future of task management. Part of the Whisperr ecosystem.",
+  title: "WhisperrFlow - Smart Task Navigation",
+  description: "The future of task orchestration inside the Whisperr ecosystem.",
   keywords: ["task management", "productivity", "whisperr", "todo", "project management"],
   authors: [{ name: "Whisperr Team" }],
   openGraph: {
-    title: "WhisperrTask - Smart Task Management",
-    description: "The future of task management. Part of the Whisperr ecosystem.",
+    title: "WhisperrFlow - Smart Task Navigation",
+    description: "The future of task orchestration inside the Whisperr ecosystem.",
     type: "website",
   },
 };

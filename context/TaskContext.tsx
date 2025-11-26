@@ -128,7 +128,7 @@ const createSampleData = () => {
   const tasks: Task[] = [
     {
       id: 'task-1',
-      title: 'Design WhisperrTask dashboard',
+      title: 'Design WhisperrFlow dashboard',
       description: 'Create the main dashboard layout with widgets for task overview, upcoming deadlines, and productivity stats.',
       status: 'in-progress',
       priority: 'high',

@@ -33,7 +33,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
 
   React.useEffect(() => {
     // Load saved preference
-    const savedMode = localStorage.getItem('whisperrtask-theme') as ThemeMode | null;
+    const savedMode = localStorage.getItem('whisperrflow-theme') as ThemeMode | null;
     if (savedMode) {
       setMode(savedMode);
     }
@@ -41,7 +41,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
 
   React.useEffect(() => {
     // Save preference
-    localStorage.setItem('whisperrtask-theme', mode);
+    localStorage.setItem('whisperrflow-theme', mode);
     
     // Resolve system preference
     if (mode === 'system') {

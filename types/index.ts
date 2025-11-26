@@ -1,4 +1,4 @@
-// Task Management Types for WhisperrTask
+// Task Management Types for WhisperrFlow
 
 export type Priority = 'low' | 'medium' | 'high' | 'urgent';
 export type TaskStatus = 'todo' | 'in-progress' | 'done' | 'blocked' | 'cancelled';

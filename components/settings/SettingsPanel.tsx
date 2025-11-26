@@ -500,7 +500,7 @@ export default function SettingsPanel() {
                 Whisperr Ecosystem
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-                Connect WhisperrTask with other apps in the Whisperr ecosystem for a seamless
+                Connect WhisperrFlow with other apps in the Whisperr ecosystem for a seamless
                 experience.
               </Typography>
               <Grid container spacing={2}>
