@@ -14,6 +14,7 @@ import {
   DialogContent,
   List,
   ListItem,
+  ListItemButton,
   ListItemText,
   ListItemIcon,
   Checkbox,
@@ -255,26 +256,26 @@ export default function FocusMode() {
             {tasks
               .filter((t) => t.status !== 'done')
               .map((task) => (
-                <ListItem
-                  key={task.id}
-                  button
-                  onClick={() => handleTaskSelect(task)}
-                  selected={selectedTask?.id === task.id}
-                >
-                  <ListItemIcon>
-                    <RadioButtonUnchecked />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={task.title}
-                    secondary={task.description}
-                    primaryTypographyProps={{
-                      variant: 'body1',
-                      fontWeight: selectedTask?.id === task.id ? 'bold' : 'normal',
-                    }}
-                  />
-                  {task.priority === 'high' && (
-                    <Chip label="High" color="error" size="small" sx={{ ml: 1 }} />
-                  )}
+                <ListItem key={task.id} disablePadding>
+                  <ListItemButton
+                    onClick={() => handleTaskSelect(task)}
+                    selected={selectedTask?.id === task.id}
+                  >
+                    <ListItemIcon>
+                      <RadioButtonUnchecked />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={task.title}
+                      secondary={task.description}
+                      primaryTypographyProps={{
+                        variant: 'body1',
+                        fontWeight: selectedTask?.id === task.id ? 'bold' : 'normal',
+                      }}
+                    />
+                    {task.priority === 'high' && (
+                      <Chip label="High" color="error" size="small" sx={{ ml: 1 }} />
+                    )}
+                  </ListItemButton>
                 </ListItem>
               ))}
           </List>
