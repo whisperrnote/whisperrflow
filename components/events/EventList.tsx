@@ -13,8 +13,10 @@ import {
 } from '@mui/material';
 import { Add, CalendarMonth, List as ListIcon } from '@mui/icons-material';
 import EventCard from './EventCard';
+import EventDialog from './EventDialog';
 import { Event } from '@/types';
 import { addDays, addHours } from 'date-fns';
+import { v4 as uuidv4 } from 'uuid';
 
 // Dummy data
 const MOCK_EVENTS: Event[] = [
@@ -68,9 +70,24 @@ export default function EventList() {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [tabValue, setTabValue] = useState(0);
   const [events, setEvents] = useState<Event[]>(MOCK_EVENTS);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
+  };
+
+  const handleCreateEvent = (eventData: any) => {
+    const newEvent: Event = {
+      id: uuidv4(),
+      ...eventData,
+      attendees: ['user-1'],
+      isPublic: false,
+      creatorId: 'user-1',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    setEvents([newEvent, ...events]);
+    setIsDialogOpen(false);
   };
 
   return (
@@ -97,6 +114,7 @@ export default function EventList() {
           variant="contained"
           startIcon={<Add />}
           sx={{ borderRadius: 50, px: 3 }}
+          onClick={() => setIsDialogOpen(true)}
         >
           Create Event
         </Button>
@@ -112,11 +130,17 @@ export default function EventList() {
 
       <Grid container spacing={3}>
         {events.map((event) => (
-          <Grid item xs={12} sm={6} md={4} lg={3} key={event.id}>
+          <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={event.id}>
             <EventCard event={event} onClick={() => console.log('Clicked event', event.id)} />
           </Grid>
         ))}
       </Grid>
+
+      <EventDialog
+        open={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+        onSubmit={handleCreateEvent}
+      />
     </Box>
   );
 }

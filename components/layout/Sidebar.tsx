@@ -40,8 +40,13 @@ import {
   MoreHoriz as MoreIcon,
   Settings as SettingsIcon,
   Archive as ArchiveIcon,
+  Dashboard as DashboardIcon,
+  ChecklistRtl as TasksIcon,
+  Event as EventIcon,
+  CenterFocusStrong as FocusIcon,
 } from '@mui/icons-material';
 import { useTask } from '@/context/TaskContext';
+import { AppView } from '@/types';
 
 const DRAWER_WIDTH = 280;
 
@@ -51,6 +56,7 @@ interface NavItem {
   icon: React.ReactNode;
   badge?: number;
   color?: string;
+  view?: AppView;
 }
 
 export default function Sidebar() {
@@ -65,6 +71,8 @@ export default function Sidebar() {
     setFilter,
     filter,
     updateProject,
+    activeView,
+    setActiveView,
   } = useTask();
 
   const [projectsOpen, setProjectsOpen] = useState(true);
@@ -102,6 +110,14 @@ export default function Sidebar() {
     (t) => t.status === 'done' && !t.isArchived
   ).length;
 
+  const mainNav: NavItem[] = [
+    { id: 'dashboard', label: 'Dashboard', icon: <DashboardIcon />, view: 'dashboard' },
+    { id: 'tasks', label: 'Tasks', icon: <TasksIcon />, view: 'tasks' },
+    { id: 'calendar', label: 'Calendar', icon: <CalendarIcon />, view: 'calendar' },
+    { id: 'events', label: 'Events', icon: <EventIcon />, view: 'events' },
+    { id: 'focus', label: 'Focus Mode', icon: <FocusIcon />, view: 'focus' },
+  ];
+
   const smartLists: NavItem[] = [
     { id: 'inbox', label: 'Inbox', icon: <InboxIcon />, badge: inboxCount },
     { id: 'today', label: 'Today', icon: <TodayIcon />, badge: todayCount, color: '#10b981' },
@@ -123,7 +139,12 @@ export default function Sidebar() {
     { id: 'matrix', label: 'Priority Matrix', icon: <MatrixIcon /> },
   ];
 
+  const handleMainNavClick = (view: AppView) => {
+    setActiveView(view);
+  };
+
   const handleSmartListClick = (id: string) => {
+    setActiveView('tasks'); // Ensure we are in tasks view
     switch (id) {
       case 'inbox':
         selectProject('inbox');
@@ -169,6 +190,7 @@ export default function Sidebar() {
   };
 
   const handleProjectClick = (projectId: string) => {
+    setActiveView('tasks'); // Ensure we are in tasks view
     selectProject(projectId);
     setFilter({ ...filter, projectId, status: undefined, dueDate: undefined });
   };
@@ -212,12 +234,53 @@ export default function Sidebar() {
       }}
     >
       <Box sx={{ overflow: 'auto', py: 1 }}>
+        {/* Main Navigation */}
+        <List dense>
+          {mainNav.map((item) => (
+            <ListItem key={item.id} disablePadding>
+              <ListItemButton
+                selected={activeView === item.view}
+                onClick={() => handleMainNavClick(item.view!)}
+                sx={{
+                  borderRadius: 2,
+                  mx: 1,
+                  '&.Mui-selected': {
+                    backgroundColor: alpha(theme.palette.primary.main, 0.12),
+                    color: theme.palette.primary.main,
+                    '& .MuiListItemIcon-root': {
+                      color: theme.palette.primary.main,
+                    },
+                  },
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 36,
+                    color: activeView === item.view ? theme.palette.primary.main : theme.palette.text.secondary,
+                  }}
+                >
+                  {item.icon}
+                </ListItemIcon>
+                <ListItemText primary={item.label} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+
+        <Divider sx={{ my: 1 }} />
+
         {/* Smart Lists */}
+        <Typography
+          variant="overline"
+          sx={{ px: 2, color: 'text.secondary', display: 'block', mt: 1 }}
+        >
+          Smart Lists
+        </Typography>
         <List dense>
           {smartLists.map((item) => (
             <ListItem key={item.id} disablePadding>
               <ListItemButton
-                selected={filter.projectId === item.id || (item.id === 'completed' && filter.status?.includes('done'))}
+                selected={activeView === 'tasks' && (filter.projectId === item.id || (item.id === 'completed' && filter.status?.includes('done')))}
                 onClick={() => handleSmartListClick(item.id)}
                 sx={{
                   borderRadius: 2,
@@ -298,7 +361,7 @@ export default function Sidebar() {
               {favoriteProjects.map((project) => (
                 <ListItem key={project.id} disablePadding>
                   <ListItemButton
-                    selected={selectedProjectId === project.id}
+                    selected={activeView === 'tasks' && selectedProjectId === project.id}
                     onClick={() => handleProjectClick(project.id)}
                     sx={{
                       borderRadius: 2,
@@ -368,7 +431,7 @@ export default function Sidebar() {
             {regularProjects.map((project) => (
               <ListItem key={project.id} disablePadding>
                 <ListItemButton
-                  selected={selectedProjectId === project.id}
+                  selected={activeView === 'tasks' && selectedProjectId === project.id}
                   onClick={() => handleProjectClick(project.id)}
                   sx={{
                     borderRadius: 2,
@@ -479,15 +542,11 @@ export default function Sidebar() {
           <Divider />
           <List dense>
             <ListItem disablePadding>
-              <ListItemButton sx={{ borderRadius: 2, mx: 1 }}>
-                <ListItemIcon sx={{ minWidth: 36 }}>
-                  <ArchiveIcon fontSize="small" />
-                </ListItemIcon>
-                <ListItemText primary="Archived" />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton sx={{ borderRadius: 2, mx: 1 }}>
+              <ListItemButton
+                selected={activeView === 'settings'}
+                onClick={() => setActiveView('settings')}
+                sx={{ borderRadius: 2, mx: 1 }}
+              >
                 <ListItemIcon sx={{ minWidth: 36 }}>
                   <SettingsIcon fontSize="small" />
                 </ListItemIcon>
