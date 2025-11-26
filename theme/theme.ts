@@ -6,15 +6,15 @@ const getDesignTokens = (mode: 'light' | 'dark'): ThemeOptions => ({
   palette: {
     mode,
     primary: {
-      main: '#6366f1',
-      light: '#818cf8',
-      dark: '#4f46e5',
-      contrastText: '#ffffff',
+      main: '#F59E0B', // Sun yellow
+      light: '#FBBF24',
+      dark: '#D97706',
+      contrastText: '#1a1a1a',
     },
     secondary: {
-      main: '#ec4899',
-      light: '#f472b6',
-      dark: '#db2777',
+      main: '#8B5CF6', // Purple accent
+      light: '#A78BFA',
+      dark: '#7C3AED',
       contrastText: '#ffffff',
     },
     success: {
@@ -23,9 +23,9 @@ const getDesignTokens = (mode: 'light' | 'dark'): ThemeOptions => ({
       dark: '#059669',
     },
     warning: {
-      main: '#f59e0b',
-      light: '#fbbf24',
-      dark: '#d97706',
+      main: '#F59E0B',
+      light: '#FBBF24',
+      dark: '#D97706',
     },
     error: {
       main: '#ef4444',
@@ -33,19 +33,19 @@ const getDesignTokens = (mode: 'light' | 'dark'): ThemeOptions => ({
       dark: '#dc2626',
     },
     info: {
-      main: '#3b82f6',
-      light: '#60a5fa',
-      dark: '#2563eb',
+      main: '#8B5CF6',
+      light: '#A78BFA',
+      dark: '#7C3AED',
     },
     background: {
-      default: mode === 'light' ? '#f8fafc' : '#0f172a',
-      paper: mode === 'light' ? '#ffffff' : '#1e293b',
+      default: mode === 'light' ? '#FFFBEB' : '#1a1a1a', // Warm cream / deep ash
+      paper: mode === 'light' ? '#ffffff' : '#262626',
     },
     text: {
-      primary: mode === 'light' ? '#1e293b' : '#f1f5f9',
-      secondary: mode === 'light' ? '#64748b' : '#94a3b8',
+      primary: mode === 'light' ? '#1a1a1a' : '#fafafa',
+      secondary: mode === 'light' ? '#525252' : '#a3a3a3',
     },
-    divider: mode === 'light' ? '#e2e8f0' : '#334155',
+    divider: mode === 'light' ? '#FDE68A' : '#404040',
   },
   typography: {
     fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
@@ -212,7 +212,7 @@ const getDesignTokens = (mode: 'light' | 'dark'): ThemeOptions => ({
           borderRadius: 8,
           margin: '2px 8px',
           '&.Mui-selected': {
-            backgroundColor: 'rgba(99, 102, 241, 0.12)',
+            backgroundColor: 'rgba(245, 158, 11, 0.12)',
           },
         },
       },

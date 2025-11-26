@@ -84,25 +84,28 @@ export default function AppBar() {
       }}
     >
       <Toolbar sx={{ gap: 1 }}>
-        {/* Menu Toggle */}
+        {/* Menu Toggle - only on desktop */}
         <IconButton
           edge="start"
           color="inherit"
           aria-label="toggle sidebar"
           onClick={toggleSidebar}
-          sx={{ color: theme.palette.text.primary }}
+          sx={{ 
+            color: theme.palette.text.primary,
+            display: { xs: 'none', md: 'flex' },
+          }}
         >
           <MenuIcon />
         </IconButton>
 
         {/* Logo */}
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mr: 2 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mr: { xs: 0, md: 2 } }}>
           <Box
             sx={{
               width: 32,
               height: 32,
               borderRadius: 1.5,
-              background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+              background: 'linear-gradient(135deg, #F59E0B 0%, #8B5CF6 100%)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -134,8 +137,9 @@ export default function AppBar() {
             '&:hover': {
               backgroundColor: alpha(theme.palette.text.primary, 0.08),
             },
-            width: { xs: '100%', sm: 400 },
+            width: { xs: 0, sm: 300, md: 400 },
             maxWidth: '100%',
+            display: { xs: 'none', sm: 'block' },
           }}
         >
           <Box
@@ -188,11 +192,11 @@ export default function AppBar() {
             </IconButton>
           </Tooltip>
 
-          {/* Ecosystem Apps */}
+          {/* Ecosystem Apps - hidden on mobile */}
           <Tooltip title="Whisperr Apps">
             <IconButton
               onClick={handleAppsClick}
-              sx={{ color: theme.palette.text.secondary }}
+              sx={{ color: theme.palette.text.secondary, display: { xs: 'none', sm: 'flex' } }}
             >
               <AppsIcon />
             </IconButton>
