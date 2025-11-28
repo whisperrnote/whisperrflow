@@ -1,0 +1,382 @@
+{
+    "tablesDB": [
+        {
+            "name": "whisperrflow",
+            "enabled": true
+        }
+    ],
+    "tables": [
+        {
+            "databaseName": "whisperrflow",
+            "name": "calendars",
+            "enabled": true,
+            "rowSecurity": true,
+            "columns": [
+                {
+                    "name": "name",
+                    "type": "string",
+                    "size": 100,
+                    "required": true,
+                    "encrypt": false
+                },
+                {
+                    "name": "color",
+                    "type": "string",
+                    "size": 7,
+                    "required": true,
+                    "default": "#3b82f6",
+                    "encrypt": false
+                },
+                {
+                    "name": "isDefault",
+                    "type": "boolean",
+                    "required": true,
+                    "default": false
+                },
+                {
+                    "name": "userId",
+                    "type": "string",
+                    "size": 36,
+                    "required": true,
+                    "encrypt": false
+                }
+            ],
+            "$permissions": [
+                "create(\"users\")"
+            ]
+        },
+        {
+            "databaseName": "whisperrflow",
+            "name": "tasks",
+            "enabled": true,
+            "rowSecurity": true,
+            "columns": [
+                {
+                    "name": "title",
+                    "type": "string",
+                    "size": 255,
+                    "required": true,
+                    "encrypt": false
+                },
+                {
+                    "name": "description",
+                    "type": "string",
+                    "size": 65535,
+                    "required": false,
+                    "encrypt": false
+                },
+                {
+                    "name": "status",
+                    "type": "string",
+                    "size": 20,
+                    "required": true,
+                    "default": "todo",
+                    "encrypt": false
+                },
+                {
+                    "name": "priority",
+                    "type": "string",
+                    "size": 20,
+                    "required": true,
+                    "default": "medium",
+                    "encrypt": false
+                },
+                {
+                    "name": "dueDate",
+                    "type": "datetime",
+                    "required": false
+                },
+                {
+                    "name": "recurrenceRule",
+                    "type": "string",
+                    "size": 255,
+                    "required": false,
+                    "encrypt": false
+                },
+                {
+                    "name": "tags",
+                    "type": "string",
+                    "array": true,
+                    "size": 50,
+                    "required": false,
+                    "encrypt": false
+                },
+                {
+                    "name": "assigneeIds",
+                    "type": "string",
+                    "array": true,
+                    "size": 36,
+                    "required": false,
+                    "encrypt": false
+                },
+                {
+                    "name": "attachmentIds",
+                    "type": "string",
+                    "array": true,
+                    "size": 36,
+                    "required": false,
+                    "encrypt": false
+                },
+                {
+                    "name": "eventId",
+                    "type": "string",
+                    "size": 36,
+                    "required": false,
+                    "encrypt": false
+                },
+                {
+                    "name": "userId",
+                    "type": "string",
+                    "size": 36,
+                    "required": true,
+                    "encrypt": false
+                },
+                {
+                    "name": "parentId",
+                    "type": "string",
+                    "size": 36,
+                    "required": false,
+                    "encrypt": false
+                }
+            ],
+            "$permissions": [
+                "create(\"users\")"
+            ]
+        },
+        {
+            "databaseName": "whisperrflow",
+            "name": "events",
+            "enabled": true,
+            "rowSecurity": true,
+            "columns": [
+                {
+                    "name": "title",
+                    "type": "string",
+                    "size": 255,
+                    "required": true,
+                    "encrypt": false
+                },
+                {
+                    "name": "description",
+                    "type": "string",
+                    "size": 65535,
+                    "required": false,
+                    "encrypt": false
+                },
+                {
+                    "name": "startTime",
+                    "type": "datetime",
+                    "required": true
+                },
+                {
+                    "name": "endTime",
+                    "type": "datetime",
+                    "required": true
+                },
+                {
+                    "name": "location",
+                    "type": "string",
+                    "size": 255,
+                    "required": false,
+                    "encrypt": false
+                },
+                {
+                    "name": "meetingUrl",
+                    "type": "string",
+                    "size": 2048,
+                    "required": false,
+                    "encrypt": false
+                },
+                {
+                    "name": "visibility",
+                    "type": "string",
+                    "size": 20,
+                    "required": true,
+                    "default": "private",
+                    "encrypt": false
+                },
+                {
+                    "name": "status",
+                    "type": "string",
+                    "size": 20,
+                    "required": true,
+                    "default": "scheduled",
+                    "encrypt": false
+                },
+                {
+                    "name": "coverImageId",
+                    "type": "string",
+                    "size": 36,
+                    "required": false,
+                    "encrypt": false
+                },
+                {
+                    "name": "maxAttendees",
+                    "type": "integer",
+                    "required": false,
+                    "default": 0
+                },
+                {
+                    "name": "recurrenceRule",
+                    "type": "string",
+                    "size": 255,
+                    "required": false,
+                    "encrypt": false
+                },
+                {
+                    "name": "calendarId",
+                    "type": "string",
+                    "size": 36,
+                    "required": true,
+                    "encrypt": false
+                },
+                {
+                    "name": "userId",
+                    "type": "string",
+                    "size": 36,
+                    "required": true,
+                    "encrypt": false
+                }
+            ],
+            "$permissions": [
+                "create(\"users\")"
+            ]
+        },
+        {
+            "databaseName": "whisperrflow",
+            "name": "eventGuests",
+            "enabled": true,
+            "rowSecurity": true,
+            "columns": [
+                {
+                    "name": "eventId",
+                    "type": "string",
+                    "size": 36,
+                    "required": true,
+                    "encrypt": false
+                },
+                {
+                    "name": "userId",
+                    "type": "string",
+                    "size": 36,
+                    "required": false,
+                    "encrypt": false
+                },
+                {
+                    "name": "email",
+                    "type": "string",
+                    "size": 255,
+                    "required": false,
+                    "encrypt": true
+                },
+                {
+                    "name": "status",
+                    "type": "string",
+                    "size": 20,
+                    "required": true,
+                    "default": "pending",
+                    "encrypt": false
+                },
+                {
+                    "name": "role",
+                    "type": "string",
+                    "size": 20,
+                    "required": true,
+                    "default": "guest",
+                    "encrypt": false
+                }
+            ],
+            "$permissions": [
+                "create(\"users\")"
+            ]
+        },
+        {
+            "databaseName": "whisperrflow",
+            "name": "focusSessions",
+            "enabled": true,
+            "rowSecurity": true,
+            "columns": [
+                {
+                    "name": "userId",
+                    "type": "string",
+                    "size": 36,
+                    "required": true,
+                    "encrypt": false
+                },
+                {
+                    "name": "taskId",
+                    "type": "string",
+                    "size": 36,
+                    "required": false,
+                    "encrypt": false
+                },
+                {
+                    "name": "startTime",
+                    "type": "datetime",
+                    "required": true
+                },
+                {
+                    "name": "endTime",
+                    "type": "datetime",
+                    "required": false
+                },
+                {
+                    "name": "duration",
+                    "type": "integer",
+                    "required": true,
+                    "default": 0
+                },
+                {
+                    "name": "status",
+                    "type": "string",
+                    "size": 20,
+                    "required": true,
+                    "default": "completed",
+                    "encrypt": false
+                }
+            ],
+            "$permissions": [
+                "create(\"users\")"
+            ]
+        }
+    ],
+    "buckets": [
+        {
+            "name": "task_attachments",
+            "enabled": true,
+            "fileSecurity": true,
+            "maximumFileSize": 20971520,
+            "allowedFileExtensions": [],
+            "compression": "gzip",
+            "encryption": true,
+            "antivirus": true,
+            "$permissions": [
+                "create(\"users\")",
+                "read(\"users\")",
+                "update(\"users\")",
+                "delete(\"users\")"
+            ]
+        },
+        {
+            "name": "event_covers",
+            "enabled": true,
+            "fileSecurity": false,
+            "maximumFileSize": 5242880,
+            "allowedFileExtensions": [
+                "jpg",
+                "jpeg",
+                "png",
+                "webp"
+            ],
+            "compression": "gzip",
+            "encryption": true,
+            "antivirus": true,
+            "$permissions": [
+                "create(\"users\")",
+                "read(\"any\")",
+                "update(\"users\")",
+                "delete(\"users\")"
+            ]
+        }
+    ]
+}
