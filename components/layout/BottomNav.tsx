@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   Box,
   BottomNavigation,
@@ -17,17 +18,27 @@ import {
   Add as AddIcon,
 } from '@mui/icons-material';
 import { useTask } from '@/context/TaskContext';
-import { AppView } from '@/types';
 
 export default function BottomNav() {
   const theme = useTheme();
-  const { activeView, setActiveView, setTaskDialogOpen } = useTask();
+  const pathname = usePathname();
+  const router = useRouter();
+  const { setTaskDialogOpen } = useTask();
 
-  const handleChange = (_: React.SyntheticEvent, newValue: AppView | 'add') => {
+  // Determine active value based on pathname
+  const getValue = () => {
+    if (pathname.startsWith('/dashboard')) return 'dashboard';
+    if (pathname.startsWith('/tasks')) return 'tasks';
+    if (pathname.startsWith('/focus')) return 'focus';
+    if (pathname.startsWith('/calendar')) return 'calendar';
+    return 'dashboard'; // Default
+  };
+
+  const handleChange = (_: React.SyntheticEvent, newValue: string) => {
     if (newValue === 'add') {
       setTaskDialogOpen(true);
     } else {
-      setActiveView(newValue);
+      router.push(`/${newValue}`);
     }
   };
 
@@ -53,7 +64,7 @@ export default function BottomNav() {
         }}
       >
         <BottomNavigation
-          value={activeView}
+          value={getValue()}
           onChange={handleChange}
           showLabels
           sx={{

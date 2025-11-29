@@ -4,6 +4,7 @@ import React from 'react';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
 import AppBar from '@/components/layout/AppBar';
 import Sidebar from '@/components/layout/Sidebar';
+import BottomNav from '@/components/layout/BottomNav';
 import { useTask } from '@/context/TaskContext';
 
 const DRAWER_WIDTH = 280;
@@ -36,6 +37,8 @@ export default function MainLayout({ children }: MainLayoutProps) {
       >
         {children}
       </Box>
+      {/* BottomNav only visible on mobile */}
+      {isMobile && <BottomNav />}
     </Box>
   );
 }
