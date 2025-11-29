@@ -1,13 +1,13 @@
 import { Models } from "appwrite";
 
-export interface Calendar extends Models.Document {
+export interface Calendar extends Models.Row {
     name: string;
     color: string;
     isDefault: boolean;
     userId: string;
 }
 
-export interface Task extends Models.Document {
+export interface Task extends Models.Row {
     title: string;
     description?: string;
     status: string;
@@ -22,7 +22,7 @@ export interface Task extends Models.Document {
     parentId?: string;
 }
 
-export interface Event extends Models.Document {
+export interface Event extends Models.Row {
     title: string;
     description?: string;
     startTime: string;
@@ -38,7 +38,7 @@ export interface Event extends Models.Document {
     userId: string;
 }
 
-export interface EventGuest extends Models.Document {
+export interface EventGuest extends Models.Row {
     eventId: string;
     userId?: string;
     email?: string;
@@ -46,7 +46,7 @@ export interface EventGuest extends Models.Document {
     role: string;
 }
 
-export interface FocusSession extends Models.Document {
+export interface FocusSession extends Models.Row {
     userId: string;
     taskId?: string;
     startTime: string;
