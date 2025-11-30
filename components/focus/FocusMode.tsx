@@ -37,7 +37,7 @@ import { focusSessions } from '@/lib/whisperrflow';
 
 export default function FocusMode() {
   const theme = useTheme();
-  const { tasks, updateTask } = useTask();
+  const { tasks, updateTask, userId } = useTask();
   const [isActive, setIsActive] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [timeLeft, setTimeLeft] = useState(25 * 60); // 25 minutes default
@@ -56,7 +56,7 @@ export default function FocusMode() {
     } else if (timeLeft === 0) {
       setIsActive(false);
       // Save completed session
-      if (selectedTask) {
+         if (selectedTask) {
          const duration = Math.floor(initialTime / 60);
          focusSessions.create({
              startTime: new Date(Date.now() - initialTime * 1000).toISOString(),
@@ -64,6 +64,7 @@ export default function FocusMode() {
              duration: duration,
              taskId: selectedTask.id,
              status: 'completed',
+               userId: userId || 'guest',
          }).catch(console.error);
       }
     }
@@ -98,6 +99,7 @@ export default function FocusMode() {
                     duration: duration,
                     taskId: selectedTask.id,
                     status: 'interrupted',
+              userId: userId || 'guest',
                 });
             } catch (e) {
                 console.error('Failed to save focus session', e);
