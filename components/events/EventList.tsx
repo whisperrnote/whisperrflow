@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import {
   Box,
   Typography,
-  Grid,
   Button,
   Tabs,
   Tab,
@@ -12,6 +11,7 @@ import {
   useMediaQuery,
   CircularProgress,
 } from '@mui/material';
+import Grid from '@mui/material/Grid';
 import { Add, CalendarMonth, List as ListIcon } from '@mui/icons-material';
 import EventCard from './EventCard';
 import EventDialog from './EventDialog';
@@ -160,7 +160,7 @@ export default function EventList() {
 
       <Grid container spacing={3}>
         {events.map((event) => (
-          <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={event.id}>
+          <Grid item xs={12} sm={6} md={4} lg={3} key={event.id}>
             <EventCard 
               event={event} 
               onClick={() => openSecondarySidebar('event', event.id, event)} 

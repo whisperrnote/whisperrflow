@@ -8,12 +8,8 @@ import {
   Button,
   Chip,
   Divider,
-  Avatar,
-  AvatarGroup,
   useTheme,
-  alpha,
   CircularProgress,
-  Tooltip,
 } from '@mui/material';
 import {
   Close as CloseIcon,
@@ -21,25 +17,24 @@ import {
   AccessTime as TimeIcon,
   LocationOn as LocationIcon,
   Share as ShareIcon,
-  Edit as EditIcon,
-  Delete as DeleteIcon,
   VideoCall as MeetingIcon,
 } from '@mui/icons-material';
 import { format } from 'date-fns';
 import { useLayout } from '@/context/LayoutContext';
 import { events as eventApi } from '@/lib/whisperrflow';
 import { generateEventPattern } from '@/utils/patternGenerator';
-import { Event } from '@/types/whisperrflow';
+import { Event as AppwriteEvent } from '@/types/whisperrflow';
+import { Event as LocalEvent } from '@/types';
 
 interface EventDetailsProps {
   eventId: string;
-  initialData?: any;
+  initialData?: AppwriteEvent | LocalEvent | any;
 }
 
 export default function EventDetails({ eventId, initialData }: EventDetailsProps) {
   const theme = useTheme();
   const { closeSecondarySidebar } = useLayout();
-  const [event, setEvent] = useState<Event | null>(initialData || null);
+  const [event, setEvent] = useState<AppwriteEvent | LocalEvent | null>(initialData || null);
   const [loading, setLoading] = useState(!initialData);
   const [error, setError] = useState<string | null>(null);
 
@@ -64,6 +59,12 @@ export default function EventDetails({ eventId, initialData }: EventDetailsProps
     }
   }, [eventId, initialData]);
 
+  // Helper to normalize event data access
+  const getId = (evt: any) => evt?.$id || evt?.id;
+  const getCoverImage = (evt: any) => evt?.coverImageId || evt?.coverImage;
+  const getVisibility = (evt: any) => evt?.visibility || (evt?.isPublic ? 'Public' : 'Private');
+  const getMeetingUrl = (evt: any) => evt?.meetingUrl || evt?.url;
+
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
@@ -82,9 +83,14 @@ export default function EventDetails({ eventId, initialData }: EventDetailsProps
 
   const startDate = new Date(event.startTime);
   const endDate = new Date(event.endTime);
-  const coverStyle = event.coverImageId
-    ? { backgroundImage: `url(${event.coverImageId})` }
-    : { background: generateEventPattern(event.$id + event.title) };
+  const eventIdValue = getId(event);
+  const coverImage = getCoverImage(event);
+  const visibility = getVisibility(event);
+  const meetingUrl = getMeetingUrl(event);
+  
+  const coverStyle = coverImage
+    ? { backgroundImage: `url(${coverImage})` }
+    : { background: generateEventPattern(eventIdValue + event.title) };
 
   return (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -119,12 +125,12 @@ export default function EventDetails({ eventId, initialData }: EventDetailsProps
         <Box sx={{ mb: 3 }}>
             <Box sx={{ display: 'flex', gap: 1, mb: 1 }}>
                 <Chip
-                    label={event.visibility || 'Public'}
+                    label={visibility}
                     size="small"
                     color="primary"
                     variant="outlined"
                 />
-                {event.status === 'cancelled' && (
+                {(event as any).status === 'cancelled' && (
                     <Chip label="Cancelled" size="small" color="error" />
                 )}
             </Box>
@@ -163,12 +169,12 @@ export default function EventDetails({ eventId, initialData }: EventDetailsProps
                     <Typography variant="body2" gutterBottom>
                         {event.location || 'Online Event'}
                     </Typography>
-                    {event.meetingUrl && (
+                    {meetingUrl && (
                         <Button
                             variant="outlined"
                             size="small"
                             startIcon={<MeetingIcon />}
-                            href={event.meetingUrl}
+                            href={meetingUrl}
                             target="_blank"
                             sx={{ mt: 1 }}
                         >
@@ -198,7 +204,7 @@ export default function EventDetails({ eventId, initialData }: EventDetailsProps
             <Button
                 variant="contained"
                 fullWidth
-                href={`/events/${event.$id}`}
+                href={`/events/${eventIdValue}`}
                 target="_blank"
             >
                 View Event Page
@@ -208,7 +214,7 @@ export default function EventDetails({ eventId, initialData }: EventDetailsProps
                 fullWidth
                 startIcon={<ShareIcon />}
                 onClick={() => {
-                     navigator.clipboard.writeText(`${window.location.origin}/events/${event.$id}`);
+                     navigator.clipboard.writeText(`${window.location.origin}/events/${eventIdValue}`);
                 }}
             >
                 Copy Link
@@ -218,4 +224,3 @@ export default function EventDetails({ eventId, initialData }: EventDetailsProps
     </Box>
   );
 }
-
