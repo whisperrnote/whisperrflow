@@ -12,6 +12,7 @@ import {
   Paper,
   Container,
   Skeleton,
+  useTheme,
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import {
@@ -139,12 +140,12 @@ export default function EventPage() {
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <Skeleton variant="rectangular" height={300} sx={{ borderRadius: 3, mb: 4 }} />
         <Grid container spacing={4}>
-          <Grid item xs={12} md={8}>
+          <Grid item={true} xs={12} md={8}>
             <Skeleton variant="text" height={60} width="80%" />
             <Skeleton variant="text" height={30} width="40%" />
             <Skeleton variant="text" height={200} sx={{ mt: 2 }} />
           </Grid>
-          <Grid item xs={12} md={4}>
+          <Grid item={true} xs={12} md={4}>
             <Skeleton variant="rectangular" height={400} sx={{ borderRadius: 3 }} />
           </Grid>
         </Grid>
