@@ -218,7 +218,6 @@ export default function Sidebar() {
           width: DRAWER_WIDTH,
           boxSizing: 'border-box',
           borderRight: `1px solid ${theme.palette.divider}`,
-          backgroundColor: theme.palette.background.default,
           mt: '64px',
           height: 'calc(100% - 64px)',
         },

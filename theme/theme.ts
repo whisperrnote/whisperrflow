@@ -1,14 +1,14 @@
 'use client';
 
-import { createTheme, ThemeOptions } from '@mui/material/styles';
+import { createTheme, ThemeOptions, alpha } from '@mui/material/styles';
 
 const getDesignTokens = (mode: 'light' | 'dark'): ThemeOptions => ({
   palette: {
     mode,
     primary: {
-      main: '#F59E0B', // Sun yellow
-      light: '#FBBF24',
-      dark: '#D97706',
+      main: '#FFC700', // Sun yellow
+      light: '#FFCF40',
+      dark: '#D6A300',
       contrastText: '#1a1a1a',
     },
     secondary: {
@@ -38,8 +38,8 @@ const getDesignTokens = (mode: 'light' | 'dark'): ThemeOptions => ({
       dark: '#7C3AED',
     },
     background: {
-      default: mode === 'light' ? '#FFFBEB' : '#1a1a1a', // Warm cream / deep ash
-      paper: mode === 'light' ? '#ffffff' : '#262626',
+      default: mode === 'light' ? '#FFF7EE' : '#0c0c0c',
+      paper: mode === 'light' ? '#ffffff' : '#1f1f1f',
     },
     text: {
       primary: mode === 'light' ? '#1a1a1a' : '#fafafa',
@@ -165,31 +165,74 @@ const getDesignTokens = (mode: 'light' | 'dark'): ThemeOptions => ({
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: 8,
-          padding: '8px 16px',
+          borderRadius: 10,
+          padding: '10px 20px',
           fontWeight: 600,
         },
-        contained: {
-          boxShadow: 'none',
+        contained: ({ theme }) => ({
+          backgroundImage:
+            theme.palette.mode === 'light'
+              ? 'linear-gradient(135deg, #fff59d, #ffc700)'
+              : `linear-gradient(135deg, ${alpha(theme.palette.primary.light, 0.65)}, ${
+                  theme.palette.primary.main
+                })`,
+          color: '#1a1a1a',
+          boxShadow: '0px 12px 40px rgba(0, 0, 0, 0.15)',
           '&:hover': {
-            boxShadow: '0px 4px 6px -1px rgba(0, 0, 0, 0.1)',
+            boxShadow: '0px 16px 50px rgba(0, 0, 0, 0.25)',
           },
+        }),
+        outlined: {
+          border: '1px solid',
+          borderColor: alpha('#FFC700', 0.6),
         },
+      },
+    },
+    MuiAppBar: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          backgroundColor:
+            theme.palette.mode === 'light'
+              ? 'rgba(255, 255, 255, 0.92)'
+              : 'rgba(18, 18, 18, 0.85)',
+          borderBottom: `1px solid ${alpha(theme.palette.primary.main, 0.4)}`,
+          backdropFilter: 'blur(24px)',
+          boxShadow: '0px 25px 60px rgba(0, 0, 0, 0.20)',
+        }),
       },
     },
     MuiCard: {
       styleOverrides: {
-        root: {
-          borderRadius: 16,
-          boxShadow: '0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -1px rgba(0, 0, 0, 0.06)',
-        },
+        root: ({ theme }) => ({
+          borderRadius: 18,
+          boxShadow:
+            theme.palette.mode === 'light'
+              ? '0px 25px 60px rgba(0, 0, 0, 0.12)'
+              : '0px 10px 40px rgba(0, 0, 0, 0.45)',
+          border: `1px solid ${alpha(theme.palette.primary.main, 0.25)}`,
+        }),
       },
     },
     MuiPaper: {
       styleOverrides: {
-        root: {
-          backgroundImage: 'none',
-        },
+        root: ({ theme }) => ({
+          backgroundColor:
+            theme.palette.mode === 'light'
+              ? 'rgba(255, 255, 255, 0.95)'
+              : 'rgba(32, 32, 32, 0.85)',
+          borderRadius: 20,
+          padding: 0,
+          boxShadow:
+            theme.palette.mode === 'light'
+              ? '0px 25px 55px rgba(0, 0, 0, 0.15)'
+              : '0px 12px 40px rgba(0, 0, 0, 0.55)',
+          border: `1px solid ${alpha(theme.palette.primary.main, theme.palette.mode === 'light' ? 0.35 : 0.1)}`,
+          backdropFilter: 'blur(24px)',
+          backgroundImage:
+            theme.palette.mode === 'light'
+              ? 'linear-gradient(180deg, rgba(255,255,255,0.65), rgba(255,255,255,0.4))'
+              : 'none',
+        }),
       },
     },
     MuiChip: {
@@ -203,6 +246,11 @@ const getDesignTokens = (mode: 'light' | 'dark'): ThemeOptions => ({
       styleOverrides: {
         paper: {
           borderRight: 'none',
+          boxShadow: '0px 35px 80px rgba(0, 0, 0, 0.15)',
+          background:
+            'linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.88))',
+          backdropFilter: 'blur(20px)',
+          borderRadius: '0 24px 24px 0',
         },
       },
     },
@@ -212,7 +260,12 @@ const getDesignTokens = (mode: 'light' | 'dark'): ThemeOptions => ({
           borderRadius: 8,
           margin: '2px 8px',
           '&.Mui-selected': {
-            backgroundColor: 'rgba(245, 158, 11, 0.12)',
+            background:
+              'linear-gradient(135deg, rgba(255, 199, 0, 0.2), rgba(255, 199, 0, 0.05))',
+            boxShadow: '0px 10px 30px rgba(255, 199, 0, 0.2)',
+          },
+          '&:hover': {
+            background: 'rgba(255, 199, 0, 0.08)',
           },
         },
       },
