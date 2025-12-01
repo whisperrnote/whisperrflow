@@ -48,6 +48,17 @@ const ecosystemApps = [
   { name: 'WhisperrAuth', icon: '🛡️', color: '#ef4444', description: 'Authentication' },
 ];
 
+function getInitials(user: { name?: string | null; email?: string | null } | null) {
+  const text = user?.name?.trim() || user?.email?.split('@')[0] || '';
+  if (!text) return 'U';
+  const parts = text.split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return 'U';
+  if (parts.length === 1) {
+    return parts[0].slice(0, 2).toUpperCase();
+  }
+  return (parts[0][0] + parts[1][0]).toUpperCase();
+}
+
 export default function AppBar() {
   const theme = useTheme();
   const { mode, toggleMode } = useThemeMode();
@@ -238,7 +249,7 @@ export default function AppBar() {
                   fontSize: '0.9rem',
                 }}
               >
-                U
+                {getInitials(user)}
               </Avatar>
             </IconButton>
           </Tooltip>
