@@ -49,6 +49,7 @@ import {
   Settings as SettingsIcon,
 } from '@mui/icons-material';
 import { useThemeMode } from '@/theme';
+import { CampConnectButton } from '../origin/CampConnectButton';
 
 interface TabPanelProps {
   children?: React.ReactNode;
