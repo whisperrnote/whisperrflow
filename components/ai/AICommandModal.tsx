@@ -259,7 +259,7 @@ export default function AICommandModal({ open, onClose }: AICommandModalProps) {
                   p: 0.5,
                 }}
               >
-                <CheckCircleIcon fontSize="small" />
+                <CheckCircleIcon size={20} />
               </Box>
               <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
@@ -276,14 +276,14 @@ export default function AICommandModal({ open, onClose }: AICommandModalProps) {
                 
                 {result.data.description && (
                   <Box sx={{ display: 'flex', gap: 1, mt: 1, color: 'text.secondary' }}>
-                    <DescriptionIcon fontSize="small" />
+                    <DescriptionIcon size={20} />
                     <Typography variant="body2">{result.data.description}</Typography>
                   </Box>
                 )}
 
                 {(result.data.dueDate || result.data.startTime) && (
                   <Box sx={{ display: 'flex', gap: 1, mt: 1, color: 'text.secondary' }}>
-                    <ScheduleIcon fontSize="small" />
+                    <ScheduleIcon size={20} />
                     <Typography variant="body2">
                       {result.intent === 'create_task' && result.data.dueDate
                         ? new Date(result.data.dueDate).toLocaleString()

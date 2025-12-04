@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
+import withBundleAnalyzer from '@next/bundle-analyzer';
 
-const nextConfig: NextConfig = {
+const config: NextConfig = {
   serverExternalPackages: ['pino', 'thread-stream', '@walletconnect/logger'],
   webpack: (config, { isServer }) => {
     if (!isServer) {
@@ -33,5 +34,9 @@ const nextConfig: NextConfig = {
     ],
   },
 };
+
+const nextConfig = withBundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+})(config);
 
 export default nextConfig;

@@ -606,7 +606,9 @@ export default function TaskDetails({ taskId }: TaskDetailsProps) {
             onClick={() => handlePriorityChange(priority)}
             selected={task.priority === priority}
           >
-            <FlagIcon sx={{ color: priorityColors[priority], mr: 1 }} />
+            <Box component="span" sx={{ mr: 1, display: 'flex', alignItems: 'center' }}>
+              <FlagIcon color={priorityColors[priority]} size={18} />
+            </Box>
             {priority.charAt(0).toUpperCase() + priority.slice(1)}
           </MenuItem>
         ))}

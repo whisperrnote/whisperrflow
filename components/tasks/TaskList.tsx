@@ -297,7 +297,7 @@ export default function TaskList() {
             </ListItemIcon>
             <ListItemText>{item.label}</ListItemText>
             {filter.status?.includes(item.status) && (
-              <CheckIcon fontSize="small" color="primary" />
+              <CheckIcon size={20} color={theme.palette.primary.main} />
             )}
           </MenuItem>
         ))}
@@ -306,13 +306,13 @@ export default function TaskList() {
           onClick={() => setFilter({ ...filter, showCompleted: !filter.showCompleted })}
         >
           <ListItemText>Show completed</ListItemText>
-          {filter.showCompleted && <CheckIcon fontSize="small" color="primary" />}
+          {filter.showCompleted && <CheckIcon size={20} color={theme.palette.primary.main} />}
         </MenuItem>
         <MenuItem
           onClick={() => setFilter({ ...filter, showArchived: !filter.showArchived })}
         >
           <ListItemText>Show archived</ListItemText>
-          {filter.showArchived && <CheckIcon fontSize="small" color="primary" />}
+          {filter.showArchived && <CheckIcon size={20} color={theme.palette.primary.main} />}
         </MenuItem>
         <Divider sx={{ my: 1 }} />
         <MenuItem
@@ -407,7 +407,7 @@ export default function TaskList() {
                   />
                 </Box>
                 <IconButton size="small" onClick={() => setTaskDialogOpen(true)}>
-                  <AddIcon fontSize="small" />
+                  <AddIcon size={20} />
                 </IconButton>
               </Box>
               <Box>
@@ -431,7 +431,9 @@ export default function TaskList() {
             borderRadius: 2,
           }}
         >
-          <CalendarIcon sx={{ fontSize: 64, mb: 2, opacity: 0.5 }} />
+          <Box sx={{ mb: 2, opacity: 0.5 }}>
+            <CalendarIcon size={64} />
+          </Box>
           <Typography variant="h6" gutterBottom>
             Calendar View
           </Typography>
@@ -452,7 +454,9 @@ export default function TaskList() {
             borderRadius: 2,
           }}
         >
-          <TimelineIcon sx={{ fontSize: 64, mb: 2, opacity: 0.5 }} />
+          <Box sx={{ mb: 2, opacity: 0.5 }}>
+            <TimelineIcon size={64} />
+          </Box>
           <Typography variant="h6" gutterBottom>
             Timeline View
           </Typography>
