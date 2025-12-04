@@ -49,8 +49,13 @@ import {
   Settings as SettingsIcon,
 } from '@mui/icons-material';
 import { useThemeMode } from '@/theme';
-import { CampConnectButton } from '../origin/CampConnectButton';
+import dynamic from 'next/dynamic';
 import { useSettings } from '@/hooks/useSettings';
+
+const CampConnectButton = dynamic(() => import('../origin/CampConnectButton').then(mod => mod.CampConnectButton), {
+  loading: () => <Button variant="outlined" disabled>Loading...</Button>,
+  ssr: false,
+});
 
 interface TabPanelProps {
   children?: React.ReactNode;

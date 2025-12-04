@@ -39,8 +39,13 @@ import {
 import { useTask } from '@/context/TaskContext';
 import { Task } from '@/types';
 import { focusSessions } from '@/lib/whisperrflow';
-import { useOriginFocus } from '@/hooks/useOriginFocus';
 import { useAI } from '@/hooks/useAI';
+import dynamic from 'next/dynamic';
+
+const OriginFocusSection = dynamic(() => import('./OriginFocusSection'), {
+  loading: () => null,
+  ssr: false,
+});
 
 export default function FocusMode() {
   const theme = useTheme();
@@ -54,7 +59,6 @@ export default function FocusMode() {
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   // Origin Integration
-  const { isAuthenticated, playlists, fetchPlaylists, loading: loadingPlaylists } = useOriginFocus();
   const [selectedPlaylist, setSelectedPlaylist] = useState<string>('');
 
   // AI Integration
@@ -78,11 +82,8 @@ export default function FocusMode() {
     }
   };
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      fetchPlaylists();
-    }
-  }, [isAuthenticated]);
+  // Removed Origin specific useEffects, moved to component
+
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -312,28 +313,10 @@ export default function FocusMode() {
       )}
 
       {/* Origin Spotify Integration */}
-      {isAuthenticated && (
-        <Box sx={{ mb: 4, width: '100%', maxWidth: 500 }}>
-          <FormControl fullWidth size="small">
-            <InputLabel>Focus Music (Spotify)</InputLabel>
-            <Select
-              value={selectedPlaylist}
-              label="Focus Music (Spotify)"
-              onChange={(e) => setSelectedPlaylist(e.target.value)}
-              disabled={loadingPlaylists}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              {playlists.map((playlist: any) => (
-                <MenuItem key={playlist.id} value={playlist.id}>
-                  {playlist.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Box>
-      )}
+      <OriginFocusSection 
+        selectedPlaylist={selectedPlaylist} 
+        onPlaylistSelect={setSelectedPlaylist} 
+      />
 
       {/* Selected Task */}
       <Box sx={{ mb: 4, width: '100%', maxWidth: 500 }}>
