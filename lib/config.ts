@@ -1,5 +1,9 @@
 const getRequiredEnv = (key: string, value: string | undefined): string => {
   if (!value) {
+    if (process.env.NODE_ENV === 'production') {
+      console.warn(`[config] Missing environment variable: ${key}. Using placeholder for build.`);
+      return '';
+    }
     throw new Error(`Missing environment variable: ${key}`);
   }
   return value;

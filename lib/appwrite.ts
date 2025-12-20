@@ -3,9 +3,12 @@ import { APPWRITE_CONFIG } from "./config";
 
 const client = new Client();
 
-client
-    .setEndpoint(APPWRITE_CONFIG.ENDPOINT)
-    .setProject(APPWRITE_CONFIG.PROJECT_ID);
+if (APPWRITE_CONFIG.ENDPOINT) {
+    client.setEndpoint(APPWRITE_CONFIG.ENDPOINT);
+}
+if (APPWRITE_CONFIG.PROJECT_ID) {
+    client.setProject(APPWRITE_CONFIG.PROJECT_ID);
+}
 
 export const tablesDB = new TablesDB(client);
 export const storage = new Storage(client);
