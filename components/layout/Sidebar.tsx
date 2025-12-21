@@ -254,14 +254,14 @@ export default function Sidebar() {
                     color: pathname === item.href ? '#fff' : theme.palette.text.secondary,
                   }}
                 >
-                  {React.cloneElement(item.icon as React.ReactElement, { className: 'h-6 w-6' })}
+                  {React.cloneElement(item.icon as React.ReactElement, { className: 'h-6 w-6' } as any)}
                 </ListItemIcon>
-                <ListItemText 
-                  primary={item.label} 
-                  primaryTypographyProps={{ 
+                <ListItemText
+                  primary={item.label}
+                  primaryTypographyProps={{
                     fontWeight: pathname === item.href ? 700 : 500,
                     fontSize: '0.95rem'
-                  }} 
+                  }}
                 />
               </ListItemButton>
             </ListItem>
@@ -303,12 +303,12 @@ export default function Sidebar() {
                 >
                   {React.cloneElement(item.icon as React.ReactElement, { className: 'h-5 w-5' })}
                 </ListItemIcon>
-                <ListItemText 
-                  primary={item.label} 
-                  primaryTypographyProps={{ 
+                <ListItemText
+                  primary={item.label}
+                  primaryTypographyProps={{
                     fontWeight: 600,
                     fontSize: '0.9rem'
-                  }} 
+                  }}
                 />
                 {item.badge !== undefined && item.badge > 0 && (
                   <Badge
@@ -352,12 +352,12 @@ export default function Sidebar() {
                 <ListItemIcon sx={{ minWidth: 40, color: theme.palette.text.secondary }}>
                   {React.cloneElement(item.icon as React.ReactElement, { className: 'h-5 w-5' })}
                 </ListItemIcon>
-                <ListItemText 
-                  primary={item.label} 
-                  primaryTypographyProps={{ 
+                <ListItemText
+                  primary={item.label}
+                  primaryTypographyProps={{
                     fontWeight: 500,
                     fontSize: '0.9rem'
-                  }} 
+                  }}
                 />
               </ListItemButton>
             </ListItem>
@@ -400,12 +400,12 @@ export default function Sidebar() {
                         }}
                       />
                     </ListItemIcon>
-                    <ListItemText 
-                      primary={project.name} 
-                      primaryTypographyProps={{ 
+                    <ListItemText
+                      primary={project.name}
+                      primaryTypographyProps={{
                         fontWeight: 600,
                         fontSize: '0.9rem'
-                      }} 
+                      }}
                     />
                     <IconButton
                       size="small"
@@ -479,7 +479,7 @@ export default function Sidebar() {
                   </ListItemIcon>
                   <ListItemText
                     primary={project.name}
-                    primaryTypographyProps={{ 
+                    primaryTypographyProps={{
                       fontWeight: 500,
                       fontSize: '0.9rem'
                     }}
@@ -561,12 +561,12 @@ export default function Sidebar() {
                   <ListItemIcon sx={{ minWidth: 40 }}>
                     <LabelIcon style={{ color: label.color }} className="h-5 w-5" />
                   </ListItemIcon>
-                  <ListItemText 
-                    primary={label.name} 
-                    primaryTypographyProps={{ 
+                  <ListItemText
+                    primary={label.name}
+                    primaryTypographyProps={{
                       fontWeight: 500,
                       fontSize: '0.9rem'
-                    }} 
+                    }}
                   />
                 </ListItemButton>
               </ListItem>
@@ -588,12 +588,12 @@ export default function Sidebar() {
                 <ListItemIcon sx={{ minWidth: 40 }}>
                   <SettingsIcon className="h-5 w-5" />
                 </ListItemIcon>
-                <ListItemText 
-                  primary="Settings" 
-                  primaryTypographyProps={{ 
+                <ListItemText
+                  primary="Settings"
+                  primaryTypographyProps={{
                     fontWeight: 600,
                     fontSize: '0.95rem'
-                  }} 
+                  }}
                 />
               </ListItemButton>
             </ListItem>
