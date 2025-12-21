@@ -301,7 +301,7 @@ export default function Sidebar() {
                     color: item.color || theme.palette.text.secondary,
                   }}
                 >
-                  {React.cloneElement(item.icon as React.ReactElement, { className: 'h-5 w-5' })}
+                  {React.cloneElement(item.icon as React.ReactElement, { className: 'h-5 w-5' } as any)}
                 </ListItemIcon>
                 <ListItemText
                   primary={item.label}
@@ -350,7 +350,7 @@ export default function Sidebar() {
                 }}
               >
                 <ListItemIcon sx={{ minWidth: 40, color: theme.palette.text.secondary }}>
-                  {React.cloneElement(item.icon as React.ReactElement, { className: 'h-5 w-5' })}
+                  {React.cloneElement(item.icon as React.ReactElement, { className: 'h-5 w-5' } as any)}
                 </ListItemIcon>
                 <ListItemText
                   primary={item.label}
