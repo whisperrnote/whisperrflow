@@ -42,20 +42,32 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   React.useEffect(() => {
     // Save preference
     localStorage.setItem('whisperrflow-theme', mode);
-    
+
     // Resolve system preference
+    let activeMode: 'light' | 'dark';
     if (mode === 'system') {
       const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      setResolvedMode(mediaQuery.matches ? 'dark' : 'light');
-      
+      activeMode = mediaQuery.matches ? 'dark' : 'light';
+      setResolvedMode(activeMode);
+
       const handler = (e: MediaQueryListEvent) => {
-        setResolvedMode(e.matches ? 'dark' : 'light');
+        const newMode = e.matches ? 'dark' : 'light';
+        setResolvedMode(newMode);
+        document.documentElement.classList.remove('light', 'dark');
+        document.documentElement.classList.add(newMode);
       };
-      
+
       mediaQuery.addEventListener('change', handler);
+
+      document.documentElement.classList.remove('light', 'dark');
+      document.documentElement.classList.add(activeMode);
+
       return () => mediaQuery.removeEventListener('change', handler);
     } else {
+      activeMode = mode;
       setResolvedMode(mode);
+      document.documentElement.classList.remove('light', 'dark');
+      document.documentElement.classList.add(mode);
     }
   }, [mode]);
 
