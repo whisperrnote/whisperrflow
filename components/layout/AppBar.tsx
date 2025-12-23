@@ -277,7 +277,7 @@ export default function AppBar() {
           </Tooltip>
 
           {/* Profile */}
-          <Tooltip title="Sovereign ID">
+          <Tooltip title="User Profile">
             <IconButton onClick={handleProfileClick} sx={{ ml: 0.5 }}>
               <Badge
                 overlap="circular"
@@ -358,13 +358,13 @@ export default function AppBar() {
             <ListItemText primaryTypographyProps={{ fontWeight: 600 }}>Vault Settings</ListItemText>
           </MenuItem>
           <MenuItem onClick={() => {
-            alert('Nuke & Export: Compiling sovereign flow data...');
+            alert('Exporting your data...');
             handleClose();
           }}>
             <ListItemIcon>
               <LogoutIcon className="h-5 w-5 rotate-180" style={{ color: '#FFC107' }} />
             </ListItemIcon>
-            <ListItemText primaryTypographyProps={{ fontWeight: 700, color: '#FFC107' }}>Sovereign Export</ListItemText>
+            <ListItemText primaryTypographyProps={{ fontWeight: 700, color: '#FFC107' }}>Export Data</ListItemText>
           </MenuItem>
           <MenuItem>
             <ListItemIcon>

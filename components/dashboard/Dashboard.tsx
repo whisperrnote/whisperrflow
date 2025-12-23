@@ -217,10 +217,10 @@ export default function Dashboard() {
   };
 
   const productivityTips = [
-    'Agency is your product. Never nerf your tools.',
-    'Privacy is not a feature; it is your legal defense.',
-    'Build like the internet is going dark tonight.',
-    'Retention via Freedom: Make it easy for them to leave.',
+    'Focus on one task at a time to increase efficiency.',
+    'Take regular breaks to maintain high energy levels.',
+    'Plan your day the night before for a smoother start.',
+    'Organize your workspace to reduce distractions.',
   ];
 
   const randomTip = productivityTips[Math.floor(Math.random() * productivityTips.length)];
@@ -230,7 +230,7 @@ export default function Dashboard() {
       {/* Welcome Section */}
       <Box sx={{ mb: 4 }}>
         <Typography variant="h4" fontWeight={900} gutterBottom sx={{ fontFamily: 'var(--font-mono)', letterSpacing: '-0.02em' }}>
-          Greetings, Sovereign.
+          Welcome back.
         </Typography>
         <Typography variant="body1" color="text.secondary">
           {format(now, 'EEEE, MMMM d, yyyy')} • You have{' '}
@@ -463,7 +463,7 @@ export default function Dashboard() {
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
               <TipIcon color={theme.palette.primary.main} />
               <Typography variant="subtitle2" fontWeight={800} color="primary" sx={{ fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-                Operational Mandate
+                Productivity Tip
               </Typography>
             </Box>
             <Typography variant="body2" color="text.secondary">
