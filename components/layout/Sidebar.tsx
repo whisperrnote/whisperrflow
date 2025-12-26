@@ -217,16 +217,17 @@ export default function Sidebar() {
         '& .MuiDrawer-paper': {
           width: DRAWER_WIDTH,
           boxSizing: 'border-box',
-          borderRight: '1px solid #222222',
+          borderRight: '1px solid rgba(255, 255, 255, 0.08)',
           backgroundColor: '#000000',
           mt: '64px',
           height: 'calc(100% - 64px)',
+          backgroundImage: 'none',
         },
       }}
     >
-      <Box sx={{ overflow: 'auto', py: 1, height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <Box sx={{ overflow: 'auto', py: 2, height: '100%', display: 'flex', flexDirection: 'column' }}>
         {/* Main Navigation */}
-        <List dense sx={{ px: 1.5 }}>
+        <List dense sx={{ px: 2 }}>
           {mainNav.map((item) => (
             <ListItem key={item.id} disablePadding sx={{ mb: 0.5 }}>
               <ListItemButton
@@ -234,7 +235,7 @@ export default function Sidebar() {
                 href={item.href || '#'}
                 selected={pathname === item.href}
                 sx={{
-                  borderRadius: 2,
+                  borderRadius: '12px',
                   py: 1.25,
                   transition: 'all 0.2s ease',
                   '&.Mui-selected': {
@@ -248,7 +249,7 @@ export default function Sidebar() {
                     },
                   },
                   '&:hover': {
-                    backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
                   }
                 }}
               >
@@ -263,7 +264,7 @@ export default function Sidebar() {
                 <ListItemText
                   primary={item.label}
                   primaryTypographyProps={{
-                    fontWeight: pathname === item.href ? 700 : 500,
+                    fontWeight: pathname === item.href ? 800 : 600,
                     fontSize: '0.85rem',
                     letterSpacing: '0.01em'
                   }}
@@ -273,23 +274,23 @@ export default function Sidebar() {
           ))}
         </List>
 
-        <Divider sx={{ my: 1.5, mx: 2, borderColor: '#222222' }} />
+        <Divider sx={{ my: 2, mx: 3, borderColor: 'rgba(255, 255, 255, 0.08)' }} />
 
         {/* Smart Lists */}
         <Typography
           variant="overline"
-          sx={{ px: 3, color: '#404040', display: 'block', mt: 1, mb: 0.5, fontWeight: 700, fontSize: '0.65rem', letterSpacing: '0.1em' }}
+          sx={{ px: 4, color: 'text.disabled', display: 'block', mt: 1, mb: 1, fontWeight: 800, fontSize: '0.65rem', letterSpacing: '0.15em' }}
         >
           SMART LISTS
         </Typography>
-        <List dense sx={{ px: 1.5 }}>
+        <List dense sx={{ px: 2 }}>
           {smartLists.map((item) => (
             <ListItem key={item.id} disablePadding sx={{ mb: 0.5 }}>
               <ListItemButton
                 selected={pathname === '/tasks' && (filter.projectId === item.id || (item.id === 'completed' && filter.status?.includes('done')))}
                 onClick={() => handleSmartListClick(item.id)}
                 sx={{
-                  borderRadius: 2,
+                  borderRadius: '12px',
                   py: 1,
                   '&.Mui-selected': {
                     backgroundColor: 'rgba(255, 255, 255, 0.05)',
@@ -314,7 +315,7 @@ export default function Sidebar() {
                 <ListItemText
                   primary={item.label}
                   primaryTypographyProps={{
-                    fontWeight: 600,
+                    fontWeight: 700,
                     fontSize: '0.8rem'
                   }}
                 />
@@ -325,9 +326,9 @@ export default function Sidebar() {
                       '& .MuiBadge-badge': {
                         backgroundColor: item.id === 'overdue' ? '#ef4444' : '#141414',
                         color: '#F2F2F2',
-                        fontWeight: 700,
+                        fontWeight: 800,
                         fontSize: '0.65rem',
-                        border: '1px solid #222222',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
                       },
                     }}
                   />
@@ -337,39 +338,39 @@ export default function Sidebar() {
           ))}
         </List>
 
-        <Divider sx={{ my: 1.5, mx: 2, borderColor: '#222222' }} />
+        <Divider sx={{ my: 2, mx: 3, borderColor: 'rgba(255, 255, 255, 0.08)' }} />
 
         {/* Projects */}
         <Box
           sx={{
             display: 'flex',
             alignItems: 'center',
-            px: 3,
+            px: 4,
             py: 0.5,
-            mb: 0.5,
+            mb: 1,
           }}
         >
           <Typography
             variant="overline"
-            sx={{ color: '#404040', flexGrow: 1, cursor: 'pointer', fontWeight: 700, fontSize: '0.65rem', letterSpacing: '0.1em' }}
+            sx={{ color: 'text.disabled', flexGrow: 1, cursor: 'pointer', fontWeight: 800, fontSize: '0.65rem', letterSpacing: '0.15em' }}
             onClick={() => setProjectsOpen(!projectsOpen)}
           >
             PROJECTS
           </Typography>
-          <IconButton size="small" onClick={() => setProjectsOpen(!projectsOpen)} sx={{ color: '#404040' }}>
+          <IconButton size="small" onClick={() => setProjectsOpen(!projectsOpen)} sx={{ color: 'text.disabled' }}>
             {projectsOpen ? <ExpandLess className="h-4 w-4" /> : <ExpandMore className="h-4 w-4" />}
           </IconButton>
         </Box>
 
         <Collapse in={projectsOpen}>
-          <List dense sx={{ px: 1.5 }}>
+          <List dense sx={{ px: 2 }}>
             {regularProjects.map((project) => (
               <ListItem key={project.id} disablePadding sx={{ mb: 0.5 }}>
                 <ListItemButton
                   selected={pathname === '/tasks' && selectedProjectId === project.id}
                   onClick={() => handleProjectClick(project.id)}
                   sx={{
-                    borderRadius: 2,
+                    borderRadius: '12px',
                     py: 1,
                     '&.Mui-selected': {
                       backgroundColor: alpha(project.color, 0.1),
@@ -377,6 +378,9 @@ export default function Sidebar() {
                         backgroundColor: alpha(project.color, 0.15),
                       }
                     },
+                    '&:hover': {
+                      backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                    }
                   }}
                 >
                   <ListItemIcon sx={{ minWidth: 32 }}>
@@ -386,18 +390,18 @@ export default function Sidebar() {
                         height: 8,
                         borderRadius: '50%',
                         backgroundColor: project.color,
-                        boxShadow: `0 0 10px ${alpha(project.color, 0.4)}`,
+                        boxShadow: `0 0 12px ${alpha(project.color, 0.6)}`,
                       }}
                     />
                   </ListItemIcon>
                   <ListItemText
                     primary={project.name}
                     primaryTypographyProps={{
-                      fontWeight: 500,
+                      fontWeight: 600,
                       fontSize: '0.8rem'
                     }}
                   />
-                  <Typography variant="caption" sx={{ ml: 1, fontWeight: 700, color: '#404040' }}>
+                  <Typography variant="caption" sx={{ ml: 1, fontWeight: 800, color: 'text.disabled' }}>
                     {getProjectTaskCount(project.id)}
                   </Typography>
                 </ListItemButton>
@@ -406,33 +410,40 @@ export default function Sidebar() {
           </List>
         </Collapse>
 
-        <Box sx={{ mt: 'auto', p: 2 }}>
+        <Box sx={{ mt: 'auto', p: 3 }}>
           <Box
             sx={{
-              p: 2,
-              borderRadius: 3,
+              p: 2.5,
+              borderRadius: '20px',
               backgroundColor: 'rgba(255, 255, 255, 0.02)',
-              border: '1px solid #222222',
+              border: '1px solid rgba(255, 255, 255, 0.08)',
             }}
           >
-            <Typography variant="caption" sx={{ color: '#A1A1AA', fontWeight: 600, display: 'block', mb: 1 }}>
+            <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 800, display: 'block', mb: 1.5, letterSpacing: '0.05em' }}>
               STORAGE USED
             </Typography>
             <LinearProgress
               variant="determinate"
               value={45}
               sx={{
-                height: 4,
-                borderRadius: 2,
-                backgroundColor: '#141414',
+                height: 6,
+                borderRadius: 3,
+                backgroundColor: 'rgba(255, 255, 255, 0.05)',
                 '& .MuiLinearProgress-bar': {
                   backgroundColor: '#00F0FF',
+                  borderRadius: 3,
+                  boxShadow: '0 0 10px rgba(0, 240, 255, 0.5)'
                 },
               }}
             />
-            <Typography variant="caption" sx={{ color: '#404040', mt: 1, display: 'block' }}>
-              4.5GB of 10GB used
-            </Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1.5 }}>
+              <Typography variant="caption" sx={{ color: 'text.disabled', fontWeight: 600 }}>
+                4.5GB of 10GB
+              </Typography>
+              <Typography variant="caption" sx={{ color: '#00F0FF', fontWeight: 800 }}>
+                45%
+              </Typography>
+            </Box>
           </Box>
         </Box>
       </Box>

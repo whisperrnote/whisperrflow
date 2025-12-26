@@ -75,12 +75,13 @@ export default function MainLayout({ children }: MainLayoutProps) {
           sx={{
             background: 'rgba(10, 10, 10, 0.7)',
             backdropFilter: 'blur(20px) saturate(180%)',
-            borderRadius: { xs: 2, md: 3 },
+            borderRadius: { xs: '24px', md: '32px' },
             border: '1px solid rgba(255, 255, 255, 0.08)',
             minHeight: '100%',
             p: { xs: 2, md: 4 },
             position: 'relative',
             overflow: 'hidden',
+            boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.8)',
           }}
         >
         {children}

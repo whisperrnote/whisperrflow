@@ -89,11 +89,11 @@ export default function AppBar() {
       sx={{
         zIndex: theme.zIndex.drawer + 1,
         backgroundColor: 'rgba(0, 0, 0, 0.7)',
-        backdropFilter: 'blur(20px)',
-        borderBottom: '1px solid #222222',
+        backdropFilter: 'blur(20px) saturate(180%)',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
       }}
     >
-      <Toolbar sx={{ gap: 1 }}>
+      <Toolbar sx={{ gap: 1, minHeight: '64px' }}>
         {/* Menu Toggle - only on desktop */}
         <IconButton
           edge="start"
@@ -103,6 +103,7 @@ export default function AppBar() {
           sx={{
             color: '#F2F2F2',
             display: { xs: 'none', md: 'flex' },
+            '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.05)' }
           }}
         >
           <MenuIcon className="h-5 w-5" />
@@ -120,12 +121,12 @@ export default function AppBar() {
         <Box
           sx={{
             position: 'relative',
-            borderRadius: 2,
+            borderRadius: '12px',
             backgroundColor: 'rgba(255, 255, 255, 0.03)',
-            border: '1px solid #222222',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
             '&:hover': {
               backgroundColor: 'rgba(255, 255, 255, 0.05)',
-              borderColor: '#404040',
+              borderColor: 'rgba(255, 255, 255, 0.15)',
             },
             width: { xs: 0, sm: 300, md: 400 },
             maxWidth: '100%',
@@ -176,7 +177,7 @@ export default function AppBar() {
               sx={{
                 backgroundColor: 'rgba(0, 240, 255, 0.05)',
                 color: '#00F0FF',
-                borderRadius: 2,
+                borderRadius: '12px',
                 p: 1.25,
                 border: '1px solid rgba(0, 240, 255, 0.1)',
                 '&:hover': {
@@ -196,11 +197,11 @@ export default function AppBar() {
               sx={{
                 backgroundColor: '#00F0FF',
                 color: '#000000',
-                borderRadius: 2,
+                borderRadius: '12px',
                 p: 1.25,
                 '&:hover': {
                   backgroundColor: alpha('#00F0FF', 0.8),
-                  boxShadow: '0 0 15px rgba(0, 240, 255, 0.3)',
+                  boxShadow: '0 0 20px rgba(0, 240, 255, 0.4)',
                 },
                 '&:active': {
                   transform: 'scale(0.95)',
@@ -218,7 +219,7 @@ export default function AppBar() {
               sx={{
                 color: '#A1A1AA',
                 display: { xs: 'none', sm: 'flex' },
-                borderRadius: 2,
+                borderRadius: '12px',
                 p: 1.25,
                 '&:hover': {
                   backgroundColor: 'rgba(255, 255, 255, 0.05)',
@@ -236,7 +237,7 @@ export default function AppBar() {
               onClick={handleNotifClick}
               sx={{
                 color: '#A1A1AA',
-                borderRadius: 2,
+                borderRadius: '12px',
                 p: 1.25,
                 '&:hover': {
                   backgroundColor: 'rgba(255, 255, 255, 0.05)',
@@ -270,13 +271,13 @@ export default function AppBar() {
                 sx={{
                   width: 38,
                   height: 38,
-                  borderRadius: 1.5,
-                  bgcolor: '#141414',
+                  borderRadius: '10px',
+                  bgcolor: '#0A0A0A',
                   color: '#00F0FF',
                   fontSize: '0.85rem',
                   fontFamily: 'var(--font-mono)',
                   fontWeight: 700,
-                  border: '1px solid #222222',
+                  border: '1px solid rgba(255, 255, 255, 0.08)',
                 }}
               >
                 {getInitials(user)}
@@ -292,67 +293,69 @@ export default function AppBar() {
           onClose={handleClose}
           onClick={handleClose}
           PaperProps={{
-            elevation: 3,
-            sx: { width: 240, mt: 1.5 },
+            elevation: 0,
+            sx: { 
+              width: 240, 
+              mt: 1.5,
+              borderRadius: '16px',
+              bgcolor: 'rgba(10, 10, 10, 0.9)',
+              backdropFilter: 'blur(20px)',
+              border: '1px solid rgba(255, 255, 255, 0.08)',
+              backgroundImage: 'none',
+            },
           }}
           transformOrigin={{ horizontal: 'right', vertical: 'top' }}
           anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
         >
           {user && (
             <Box sx={{ px: 2, py: 1.5 }}>
-              <Typography variant="subtitle1" fontWeight={600}>
+              <Typography variant="subtitle1" sx={{ fontWeight: 800, fontFamily: 'var(--font-space-grotesk)' }}>
                 {user.name}
               </Typography>
-              <Typography variant="body2" color="text.secondary" noWrap>
+              <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
                 {user.email}
               </Typography>
             </Box>
           )}
-          <Divider />
-          <MenuItem>
+          <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.08)' }} />
+          <MenuItem sx={{ py: 1.2, '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.05)' } }}>
             <ListItemIcon>
               <PersonIcon className="h-5 w-5" />
             </ListItemIcon>
-            <ListItemText primaryTypographyProps={{ fontWeight: 500 }}>Profile</ListItemText>
+            <ListItemText primaryTypographyProps={{ fontWeight: 600 }}>Profile</ListItemText>
           </MenuItem>
-          <MenuItem onClick={() => {
-            handleClose();
-            const domain = process.env.NEXT_PUBLIC_DOMAIN || 'whisperrnote.space';
-            const authSub = process.env.NEXT_PUBLIC_AUTH_SUBDOMAIN || 'accounts';
-            window.location.href = `https://${authSub}.${domain}/settings?source=${encodeURIComponent(window.location.origin)}`;
-          }}>
+          <MenuItem 
+            sx={{ py: 1.2, '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.05)' } }}
+            onClick={() => {
+              handleClose();
+              const domain = process.env.NEXT_PUBLIC_DOMAIN || 'whisperrnote.space';
+              const authSub = process.env.NEXT_PUBLIC_AUTH_SUBDOMAIN || 'accounts';
+              window.location.href = `https://${authSub}.${domain}/settings?source=${encodeURIComponent(window.location.origin)}`;
+            }}
+          >
             <ListItemIcon>
               <SettingsIcon className="h-5 w-5" />
             </ListItemIcon>
             <ListItemText primaryTypographyProps={{ fontWeight: 600 }}>Vault Settings</ListItemText>
           </MenuItem>
-          <MenuItem onClick={() => {
-            alert('Exporting your data...');
-            handleClose();
-          }}>
+          <MenuItem 
+            sx={{ py: 1.2, '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.05)' } }}
+            onClick={() => {
+              alert('Exporting your data...');
+              handleClose();
+            }}
+          >
             <ListItemIcon>
               <LogoutIcon className="h-5 w-5 rotate-180" style={{ color: '#FFC107' }} />
             </ListItemIcon>
             <ListItemText primaryTypographyProps={{ fontWeight: 700, color: '#FFC107' }}>Export Data</ListItemText>
           </MenuItem>
-          <MenuItem>
-            <ListItemIcon>
-              <KeyboardIcon className="h-5 w-5" />
-            </ListItemIcon>
-            <ListItemText primaryTypographyProps={{ fontWeight: 500 }}>Keyboard shortcuts</ListItemText>
-          </MenuItem>
-          <MenuItem>
-            <ListItemIcon>
-              <HelpIcon className="h-5 w-5" />
-            </ListItemIcon>
-            <ListItemText primaryTypographyProps={{ fontWeight: 500 }}>Help & Support</ListItemText>
-          </MenuItem>
-          <Divider />
-          <MenuItem sx={{ color: 'error.main' }} onClick={() => logout()}>
+          <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.08)' }} />
+          <MenuItem sx={{ py: 1.2, color: 'error.main', '&:hover': { bgcolor: 'rgba(255, 0, 0, 0.05)' } }} onClick={() => logout()}>
             <ListItemIcon>
               <LogoutIcon className="h-5 w-5" style={{ color: theme.palette.error.main }} />
             </ListItemIcon>
-            <ListItemText primaryTypographyProps={{ fontWeight: 600 }}>Sign out</ListItemText>
+            <ListItemText primaryTypographyProps={{ fontWeight: 700 }}>Sign out</ListItemText>
           </MenuItem>
         </Menu>
 
@@ -363,21 +366,31 @@ export default function AppBar() {
           onClose={handleClose}
           onClick={handleClose}
           PaperProps={{
-            elevation: 3,
-            sx: { width: 320, mt: 1.5, p: 1 },
+            elevation: 0,
+            sx: { 
+              width: 320, 
+              mt: 1.5, 
+              p: 1,
+              borderRadius: '20px',
+              bgcolor: 'rgba(10, 10, 10, 0.9)',
+              backdropFilter: 'blur(20px)',
+              border: '1px solid rgba(255, 255, 255, 0.08)',
+              backgroundImage: 'none',
+            },
           }}
           transformOrigin={{ horizontal: 'right', vertical: 'top' }}
           anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
         >
-          <Typography variant="overline" sx={{ px: 1, color: 'text.secondary' }}>
+          <Typography variant="overline" sx={{ px: 2, color: 'text.secondary', fontWeight: 800, letterSpacing: '0.1em' }}>
             Whisperr Ecosystem
           </Typography>
           <Box
             sx={{
               display: 'grid',
               gridTemplateColumns: 'repeat(3, 1fr)',
-              gap: 0.5,
+              gap: 1,
               mt: 1,
+              p: 1
             }}
           >
             {ECOSYSTEM_APPS.map((app) => (
@@ -388,30 +401,33 @@ export default function AppBar() {
                   flexDirection: 'column',
                   alignItems: 'center',
                   p: 1.5,
-                  borderRadius: 2,
+                  borderRadius: '16px',
                   cursor: 'pointer',
                   backgroundColor: app.active
-                    ? alpha(theme.palette.primary.main, 0.1)
+                    ? 'rgba(0, 240, 255, 0.08)'
                     : 'transparent',
                   border: app.active
-                    ? `1px solid ${theme.palette.primary.main}`
+                    ? '1px solid rgba(0, 240, 255, 0.2)'
                     : '1px solid transparent',
+                  transition: 'all 0.2s ease',
                   '&:hover': {
-                    backgroundColor: alpha(theme.palette.primary.main, 0.05),
+                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                    transform: 'translateY(-2px)'
                   },
                 }}
               >
                 <Box
                   sx={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: 2,
+                    width: 44,
+                    height: 44,
+                    borderRadius: '12px',
                     backgroundColor: alpha(app.color, 0.15),
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     fontSize: '1.5rem',
-                    mb: 0.5,
+                    mb: 1,
+                    border: `1px solid ${alpha(app.color, 0.2)}`
                   }}
                 >
                   {app.icon}
@@ -419,8 +435,9 @@ export default function AppBar() {
                 <Typography
                   variant="caption"
                   sx={{
-                    fontWeight: app.active ? 600 : 400,
+                    fontWeight: 700,
                     textAlign: 'center',
+                    color: app.active ? '#00F0FF' : 'text.primary'
                   }}
                 >
                   {app.shortName}
@@ -436,33 +453,40 @@ export default function AppBar() {
           open={Boolean(notifAnchorEl)}
           onClose={handleClose}
           PaperProps={{
-            elevation: 3,
-            sx: { width: 360, mt: 1.5 },
+            elevation: 0,
+            sx: { 
+              width: 360, 
+              mt: 1.5,
+              borderRadius: '20px',
+              bgcolor: 'rgba(10, 10, 10, 0.9)',
+              backdropFilter: 'blur(20px)',
+              border: '1px solid rgba(255, 255, 255, 0.08)',
+              backgroundImage: 'none',
+            },
           }}
           transformOrigin={{ horizontal: 'right', vertical: 'top' }}
           anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
         >
           <Box
             sx={{
-              px: 2,
-              py: 1.5,
+              px: 2.5,
+              py: 2,
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
             }}
           >
-            <Typography variant="subtitle1" fontWeight={600}>
+            <Typography variant="subtitle1" sx={{ fontWeight: 800, fontFamily: 'var(--font-space-grotesk)' }}>
               Notifications
             </Typography>
             <Typography
-              variant="body2"
-              color="primary"
-              sx={{ cursor: 'pointer' }}
+              variant="caption"
+              sx={{ cursor: 'pointer', color: 'primary.main', fontWeight: 700 }}
             >
               Mark all read
             </Typography>
           </Box>
-          <Divider />
+          <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.08)' }} />
           {[
             {
               title: 'Task due soon',
@@ -486,28 +510,30 @@ export default function AppBar() {
             <MenuItem
               key={index}
               sx={{
-                py: 1.5,
+                py: 2,
+                px: 2.5,
                 backgroundColor: notif.unread
-                  ? alpha(theme.palette.primary.main, 0.05)
+                  ? 'rgba(0, 240, 255, 0.03)'
                   : 'transparent',
+                '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.05)' }
               }}
             >
               <Box>
-                <Typography variant="body2" fontWeight={500}>
+                <Typography variant="body2" sx={{ fontWeight: 700 }}>
                   {notif.title}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: '0.8rem' }}>
                   {notif.message}
                 </Typography>
-                <Typography variant="caption" color="text.secondary">
+                <Typography variant="caption" sx={{ color: 'text.disabled', mt: 0.5, display: 'block' }}>
                   {notif.time}
                 </Typography>
               </Box>
             </MenuItem>
           ))}
-          <Divider />
-          <MenuItem sx={{ justifyContent: 'center' }}>
-            <Typography color="primary" variant="body2">
+          <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.08)' }} />
+          <MenuItem sx={{ justifyContent: 'center', py: 1.5 }}>
+            <Typography sx={{ color: 'primary.main', variant: 'body2', fontWeight: 700 }}>
               View all notifications
             </Typography>
           </MenuItem>
