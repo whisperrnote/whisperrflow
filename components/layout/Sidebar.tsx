@@ -217,15 +217,16 @@ export default function Sidebar() {
         '& .MuiDrawer-paper': {
           width: DRAWER_WIDTH,
           boxSizing: 'border-box',
-          borderRight: `1px solid ${theme.palette.divider}`,
+          borderRight: '1px solid #222222',
+          backgroundColor: '#000000',
           mt: '64px',
           height: 'calc(100% - 64px)',
         },
       }}
     >
-      <Box sx={{ overflow: 'auto', py: 1 }}>
+      <Box sx={{ overflow: 'auto', py: 1, height: '100%', display: 'flex', flexDirection: 'column' }}>
         {/* Main Navigation */}
-        <List dense sx={{ px: 1 }}>
+        <List dense sx={{ px: 1.5 }}>
           {mainNav.map((item) => (
             <ListItem key={item.id} disablePadding sx={{ mb: 0.5 }}>
               <ListItemButton
@@ -233,72 +234,28 @@ export default function Sidebar() {
                 href={item.href || '#'}
                 selected={pathname === item.href}
                 sx={{
-                  borderRadius: 3,
+                  borderRadius: 2,
                   py: 1.25,
+                  transition: 'all 0.2s ease',
                   '&.Mui-selected': {
-                    backgroundColor: theme.palette.primary.main,
-                    color: '#fff',
+                    backgroundColor: 'rgba(0, 240, 255, 0.1)',
+                    color: '#00F0FF',
                     '& .MuiListItemIcon-root': {
-                      color: '#fff',
+                      color: '#00F0FF',
                     },
                     '&:hover': {
-                      backgroundColor: theme.palette.primary.main,
-                      opacity: 0.9,
+                      backgroundColor: 'rgba(0, 240, 255, 0.15)',
                     },
                   },
+                  '&:hover': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                  }
                 }}
               >
                 <ListItemIcon
                   sx={{
-                    minWidth: 40,
-                    color: pathname === item.href ? '#fff' : theme.palette.text.secondary,
-                  }}
-                >
-                  {React.cloneElement(item.icon as React.ReactElement, { className: 'h-6 w-6' } as any)}
-                </ListItemIcon>
-                <ListItemText
-                  primary={item.label}
-                  primaryTypographyProps={{
-                    fontWeight: pathname === item.href ? 700 : 500,
-                    fontSize: '0.95rem'
-                  }}
-                />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-
-        <Divider sx={{ my: 2, mx: 2 }} />
-
-        {/* Smart Lists */}
-        <Typography
-          variant="overline"
-          sx={{ px: 3, color: 'text.secondary', display: 'block', mt: 1, mb: 1, fontWeight: 700 }}
-        >
-          Smart Lists
-        </Typography>
-        <List dense sx={{ px: 1 }}>
-          {smartLists.map((item) => (
-            <ListItem key={item.id} disablePadding sx={{ mb: 0.5 }}>
-              <ListItemButton
-                selected={pathname === '/tasks' && (filter.projectId === item.id || (item.id === 'completed' && filter.status?.includes('done')))}
-                onClick={() => handleSmartListClick(item.id)}
-                sx={{
-                  borderRadius: 3,
-                  py: 1,
-                  '&.Mui-selected': {
-                    backgroundColor: alpha(theme.palette.primary.main, 0.15),
-                    color: theme.palette.primary.main,
-                    '& .MuiListItemIcon-root': {
-                      color: theme.palette.primary.main,
-                    },
-                  },
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 40,
-                    color: item.color || theme.palette.text.secondary,
+                    minWidth: 36,
+                    color: pathname === item.href ? '#00F0FF' : '#A1A1AA',
                   }}
                 >
                   {React.cloneElement(item.icon as React.ReactElement, { className: 'h-5 w-5' } as any)}
@@ -306,22 +263,71 @@ export default function Sidebar() {
                 <ListItemText
                   primary={item.label}
                   primaryTypographyProps={{
+                    fontWeight: pathname === item.href ? 700 : 500,
+                    fontSize: '0.85rem',
+                    letterSpacing: '0.01em'
+                  }}
+                />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+
+        <Divider sx={{ my: 1.5, mx: 2, borderColor: '#222222' }} />
+
+        {/* Smart Lists */}
+        <Typography
+          variant="overline"
+          sx={{ px: 3, color: '#404040', display: 'block', mt: 1, mb: 0.5, fontWeight: 700, fontSize: '0.65rem', letterSpacing: '0.1em' }}
+        >
+          SMART LISTS
+        </Typography>
+        <List dense sx={{ px: 1.5 }}>
+          {smartLists.map((item) => (
+            <ListItem key={item.id} disablePadding sx={{ mb: 0.5 }}>
+              <ListItemButton
+                selected={pathname === '/tasks' && (filter.projectId === item.id || (item.id === 'completed' && filter.status?.includes('done')))}
+                onClick={() => handleSmartListClick(item.id)}
+                sx={{
+                  borderRadius: 2,
+                  py: 1,
+                  '&.Mui-selected': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                    color: '#F2F2F2',
+                    '& .MuiListItemIcon-root': {
+                      color: item.color || '#F2F2F2',
+                    },
+                  },
+                  '&:hover': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                  }
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 36,
+                    color: item.color || '#A1A1AA',
+                  }}
+                >
+                  {React.cloneElement(item.icon as React.ReactElement, { className: 'h-4 w-4' } as any)}
+                </ListItemIcon>
+                <ListItemText
+                  primary={item.label}
+                  primaryTypographyProps={{
                     fontWeight: 600,
-                    fontSize: '0.9rem'
+                    fontSize: '0.8rem'
                   }}
                 />
                 {item.badge !== undefined && item.badge > 0 && (
                   <Badge
                     badgeContent={item.badge}
-                    color={item.id === 'overdue' ? 'error' : 'default'}
                     sx={{
                       '& .MuiBadge-badge': {
-                        backgroundColor:
-                          item.id === 'overdue'
-                            ? theme.palette.error.main
-                            : alpha(theme.palette.text.primary, 0.1),
-                        color: item.id === 'overdue' ? '#fff' : theme.palette.text.primary,
+                        backgroundColor: item.id === 'overdue' ? '#ef4444' : '#141414',
+                        color: '#F2F2F2',
                         fontWeight: 700,
+                        fontSize: '0.65rem',
+                        border: '1px solid #222222',
                       },
                     }}
                   />
@@ -331,99 +337,7 @@ export default function Sidebar() {
           ))}
         </List>
 
-        <Divider sx={{ my: 1 }} />
-
-        {/* View Modes */}
-        <Typography
-          variant="overline"
-          sx={{ px: 3, color: 'text.secondary', display: 'block', mt: 1, mb: 1, fontWeight: 700 }}
-        >
-          Views
-        </Typography>
-        <List dense sx={{ px: 1 }}>
-          {viewModes.map((item) => (
-            <ListItem key={item.id} disablePadding sx={{ mb: 0.5 }}>
-              <ListItemButton
-                sx={{
-                  borderRadius: 3,
-                  py: 1,
-                }}
-              >
-                <ListItemIcon sx={{ minWidth: 40, color: theme.palette.text.secondary }}>
-                  {React.cloneElement(item.icon as React.ReactElement, { className: 'h-5 w-5' } as any)}
-                </ListItemIcon>
-                <ListItemText
-                  primary={item.label}
-                  primaryTypographyProps={{
-                    fontWeight: 500,
-                    fontSize: '0.9rem'
-                  }}
-                />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-
-        <Divider sx={{ my: 2, mx: 2 }} />
-
-        {/* Favorite Projects */}
-        {favoriteProjects.length > 0 && (
-          <>
-            <Typography
-              variant="overline"
-              sx={{ px: 3, color: 'text.secondary', display: 'block', mt: 1, mb: 1, fontWeight: 700 }}
-            >
-              Favorites
-            </Typography>
-            <List dense sx={{ px: 1 }}>
-              {favoriteProjects.map((project) => (
-                <ListItem key={project.id} disablePadding sx={{ mb: 0.5 }}>
-                  <ListItemButton
-                    selected={pathname === '/tasks' && selectedProjectId === project.id}
-                    onClick={() => handleProjectClick(project.id)}
-                    sx={{
-                      borderRadius: 3,
-                      py: 1,
-                      '&.Mui-selected': {
-                        backgroundColor: alpha(project.color, 0.15),
-                      },
-                    }}
-                  >
-                    <ListItemIcon sx={{ minWidth: 40 }}>
-                      <Box
-                        sx={{
-                          width: 10,
-                          height: 10,
-                          borderRadius: '50%',
-                          backgroundColor: project.color,
-                          boxShadow: `0 0 8px ${alpha(project.color, 0.5)}`,
-                        }}
-                      />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={project.name}
-                      primaryTypographyProps={{
-                        fontWeight: 600,
-                        fontSize: '0.9rem'
-                      }}
-                    />
-                    <IconButton
-                      size="small"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleFavorite(project.id, project.isFavorite);
-                      }}
-                      sx={{ color: theme.palette.warning.main }}
-                    >
-                      <StarIcon className="h-4 w-4" />
-                    </IconButton>
-                  </ListItemButton>
-                </ListItem>
-              ))}
-            </List>
-            <Divider sx={{ my: 2, mx: 2 }} />
-          </>
-        )}
+        <Divider sx={{ my: 1.5, mx: 2, borderColor: '#222222' }} />
 
         {/* Projects */}
         <Box
@@ -432,48 +346,47 @@ export default function Sidebar() {
             alignItems: 'center',
             px: 3,
             py: 0.5,
-            mb: 1,
+            mb: 0.5,
           }}
         >
           <Typography
             variant="overline"
-            sx={{ color: 'text.secondary', flexGrow: 1, cursor: 'pointer', fontWeight: 700 }}
+            sx={{ color: '#404040', flexGrow: 1, cursor: 'pointer', fontWeight: 700, fontSize: '0.65rem', letterSpacing: '0.1em' }}
             onClick={() => setProjectsOpen(!projectsOpen)}
           >
-            Projects
+            PROJECTS
           </Typography>
-          <IconButton size="small" onClick={() => setProjectsOpen(!projectsOpen)}>
+          <IconButton size="small" onClick={() => setProjectsOpen(!projectsOpen)} sx={{ color: '#404040' }}>
             {projectsOpen ? <ExpandLess className="h-4 w-4" /> : <ExpandMore className="h-4 w-4" />}
           </IconButton>
-          <Tooltip title="Add project">
-            <IconButton size="small">
-              <AddIcon className="h-4 w-4" />
-            </IconButton>
-          </Tooltip>
         </Box>
 
         <Collapse in={projectsOpen}>
-          <List dense sx={{ px: 1 }}>
+          <List dense sx={{ px: 1.5 }}>
             {regularProjects.map((project) => (
               <ListItem key={project.id} disablePadding sx={{ mb: 0.5 }}>
                 <ListItemButton
                   selected={pathname === '/tasks' && selectedProjectId === project.id}
                   onClick={() => handleProjectClick(project.id)}
                   sx={{
-                    borderRadius: 3,
+                    borderRadius: 2,
                     py: 1,
                     '&.Mui-selected': {
                       backgroundColor: alpha(project.color, 0.1),
+                      '&:hover': {
+                        backgroundColor: alpha(project.color, 0.15),
+                      }
                     },
                   }}
                 >
-                  <ListItemIcon sx={{ minWidth: 40 }}>
+                  <ListItemIcon sx={{ minWidth: 32 }}>
                     <Box
                       sx={{
-                        width: 10,
-                        height: 10,
+                        width: 8,
+                        height: 8,
                         borderRadius: '50%',
                         backgroundColor: project.color,
+                        boxShadow: `0 0 10px ${alpha(project.color, 0.4)}`,
                       }}
                     />
                   </ListItemIcon>
@@ -481,25 +394,10 @@ export default function Sidebar() {
                     primary={project.name}
                     primaryTypographyProps={{
                       fontWeight: 500,
-                      fontSize: '0.9rem'
+                      fontSize: '0.8rem'
                     }}
-                    secondary={
-                      <LinearProgress
-                        variant="determinate"
-                        value={getProjectProgress(project.id)}
-                        sx={{
-                          mt: 0.75,
-                          height: 4,
-                          borderRadius: 2,
-                          backgroundColor: alpha(project.color, 0.1),
-                          '& .MuiLinearProgress-bar': {
-                            backgroundColor: project.color,
-                          },
-                        }}
-                      />
-                    }
                   />
-                  <Typography variant="caption" color="text.secondary" sx={{ ml: 1, fontWeight: 700 }}>
+                  <Typography variant="caption" sx={{ ml: 1, fontWeight: 700, color: '#404040' }}>
                     {getProjectTaskCount(project.id)}
                   </Typography>
                 </ListItemButton>
@@ -508,96 +406,34 @@ export default function Sidebar() {
           </List>
         </Collapse>
 
-        <Divider sx={{ my: 2, mx: 2 }} />
-
-        {/* Labels */}
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            px: 3,
-            py: 0.5,
-            mb: 1,
-          }}
-        >
-          <Typography
-            variant="overline"
-            sx={{ color: 'text.secondary', flexGrow: 1, cursor: 'pointer', fontWeight: 700 }}
-            onClick={() => setLabelsOpen(!labelsOpen)}
+        <Box sx={{ mt: 'auto', p: 2 }}>
+          <Box
+            sx={{
+              p: 2,
+              borderRadius: 3,
+              backgroundColor: 'rgba(255, 255, 255, 0.02)',
+              border: '1px solid #222222',
+            }}
           >
-            Labels
-          </Typography>
-          <IconButton size="small" onClick={() => setLabelsOpen(!labelsOpen)}>
-            {labelsOpen ? <ExpandLess className="h-4 w-4" /> : <ExpandMore className="h-4 w-4" />}
-          </IconButton>
-          <Tooltip title="Add label">
-            <IconButton size="small">
-              <AddIcon className="h-4 w-4" />
-            </IconButton>
-          </Tooltip>
-        </Box>
-
-        <Collapse in={labelsOpen}>
-          <List dense sx={{ px: 1 }}>
-            {labels.map((label) => (
-              <ListItem key={label.id} disablePadding sx={{ mb: 0.5 }}>
-                <ListItemButton
-                  onClick={() =>
-                    setFilter({
-                      ...filter,
-                      labels: filter.labels?.includes(label.id)
-                        ? filter.labels.filter((l) => l !== label.id)
-                        : [...(filter.labels || []), label.id],
-                    })
-                  }
-                  sx={{
-                    borderRadius: 3,
-                    py: 1,
-                    backgroundColor: filter.labels?.includes(label.id)
-                      ? alpha(label.color, 0.1)
-                      : 'transparent',
-                  }}
-                >
-                  <ListItemIcon sx={{ minWidth: 40 }}>
-                    <LabelIcon style={{ color: label.color }} className="h-5 w-5" />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={label.name}
-                    primaryTypographyProps={{
-                      fontWeight: 500,
-                      fontSize: '0.9rem'
-                    }}
-                  />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
-        </Collapse>
-
-        {/* Bottom Actions */}
-        <Box sx={{ mt: 'auto', pt: 2 }}>
-          <Divider sx={{ mx: 2 }} />
-          <List dense sx={{ px: 1, py: 1 }}>
-            <ListItem disablePadding>
-              <ListItemButton
-                component={Link}
-                href="/settings"
-                selected={pathname === '/settings'}
-                sx={{ borderRadius: 3, py: 1.25 }}
-              >
-                <ListItemIcon sx={{ minWidth: 40 }}>
-                  <SettingsIcon className="h-5 w-5" />
-                </ListItemIcon>
-                <ListItemText
-                  primary="Settings"
-                  primaryTypographyProps={{
-                    fontWeight: 600,
-                    fontSize: '0.95rem'
-                  }}
-                />
-              </ListItemButton>
-            </ListItem>
-          </List>
+            <Typography variant="caption" sx={{ color: '#A1A1AA', fontWeight: 600, display: 'block', mb: 1 }}>
+              STORAGE USED
+            </Typography>
+            <LinearProgress
+              variant="determinate"
+              value={45}
+              sx={{
+                height: 4,
+                borderRadius: 2,
+                backgroundColor: '#141414',
+                '& .MuiLinearProgress-bar': {
+                  backgroundColor: '#00F0FF',
+                },
+              }}
+            />
+            <Typography variant="caption" sx={{ color: '#404040', mt: 1, display: 'block' }}>
+              4.5GB of 10GB used
+            </Typography>
+          </Box>
         </Box>
       </Box>
     </Drawer>

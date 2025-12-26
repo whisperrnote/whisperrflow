@@ -56,7 +56,6 @@ function getInitials(user: { name?: string | null; email?: string | null } | nul
 
 export default function AppBar() {
   const theme = useTheme();
-  const { mode, toggleMode } = useThemeMode();
   const { toggleSidebar, setSearchQuery, searchQuery, setTaskDialogOpen } = useTask();
   const { user, logout } = useAuth();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -89,8 +88,9 @@ export default function AppBar() {
       elevation={0}
       sx={{
         zIndex: theme.zIndex.drawer + 1,
-        backgroundColor: theme.palette.background.paper,
-        borderBottom: `1px solid ${theme.palette.divider}`,
+        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        backdropFilter: 'blur(20px)',
+        borderBottom: '1px solid #222222',
       }}
     >
       <Toolbar sx={{ gap: 1 }}>
@@ -101,11 +101,11 @@ export default function AppBar() {
           aria-label="toggle sidebar"
           onClick={toggleSidebar}
           sx={{
-            color: theme.palette.text.primary,
+            color: '#F2F2F2',
             display: { xs: 'none', md: 'flex' },
           }}
         >
-          <MenuIcon />
+          <MenuIcon className="h-5 w-5" />
         </IconButton>
 
         {/* Logo */}
@@ -120,17 +120,17 @@ export default function AppBar() {
         <Box
           sx={{
             position: 'relative',
-            borderRadius: 1,
-            backgroundColor: 'rgba(255, 255, 255, 0.05)',
-            border: `1px solid ${theme.palette.divider}`,
+            borderRadius: 2,
+            backgroundColor: 'rgba(255, 255, 255, 0.03)',
+            border: '1px solid #222222',
             '&:hover': {
-              backgroundColor: 'rgba(255, 255, 255, 0.08)',
-              borderColor: theme.palette.primary.main,
+              backgroundColor: 'rgba(255, 255, 255, 0.05)',
+              borderColor: '#404040',
             },
             width: { xs: 0, sm: 300, md: 400 },
             maxWidth: '100%',
             display: { xs: 'none', sm: 'block' },
-            transition: 'all 0.1s ease',
+            transition: 'all 0.2s ease',
           }}
         >
           <Box
@@ -144,22 +144,22 @@ export default function AppBar() {
               justifyContent: 'center',
             }}
           >
-            <SearchIcon className="h-5 w-5" style={{ color: theme.palette.text.secondary }} />
+            <SearchIcon className="h-5 w-5" style={{ color: '#A1A1AA' }} />
           </Box>
           <InputBase
             placeholder="Search tasks... (Ctrl+K)"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             sx={{
-              color: theme.palette.text.primary,
+              color: '#F2F2F2',
               width: '100%',
               fontFamily: 'var(--font-mono)',
               '& .MuiInputBase-input': {
                 padding: theme.spacing(1.25, 1.5, 1.25, 0),
                 paddingLeft: `calc(1em + ${theme.spacing(4)})`,
                 width: '100%',
-                fontSize: '0.9rem',
-                fontWeight: 600,
+                fontSize: '0.85rem',
+                fontWeight: 500,
               },
             }}
           />
@@ -168,19 +168,20 @@ export default function AppBar() {
         <Box sx={{ flexGrow: 1 }} />
 
         {/* Actions */}
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           {/* AI Assistant Button */}
           <Tooltip title="AI Assistant">
             <IconButton
               onClick={() => setAiModalOpen(true)}
               sx={{
-                backgroundColor: 'rgba(26, 35, 126, 0.2)',
-                color: '#8C9EFF',
-                borderRadius: 1,
+                backgroundColor: 'rgba(0, 240, 255, 0.05)',
+                color: '#00F0FF',
+                borderRadius: 2,
                 p: 1.25,
-                border: '1px solid rgba(26, 35, 126, 0.3)',
+                border: '1px solid rgba(0, 240, 255, 0.1)',
                 '&:hover': {
-                  backgroundColor: 'rgba(26, 35, 126, 0.4)',
+                  backgroundColor: 'rgba(0, 240, 255, 0.1)',
+                  borderColor: '#00F0FF',
                 },
               }}
             >
@@ -193,19 +194,16 @@ export default function AppBar() {
             <IconButton
               onClick={() => setTaskDialogOpen(true)}
               sx={{
-                backgroundColor: theme.palette.primary.main,
-                color: '#1B1C20',
-                borderRadius: 1,
+                backgroundColor: '#00F0FF',
+                color: '#000000',
+                borderRadius: 2,
                 p: 1.25,
-                boxShadow: '4px 4px 0 rgba(26, 35, 126, 0.8)',
                 '&:hover': {
-                  backgroundColor: theme.palette.primary.main,
-                  transform: 'translate(-1px, -1px)',
-                  boxShadow: '6px 6px 0 rgba(26, 35, 126, 0.9)',
+                  backgroundColor: alpha('#00F0FF', 0.8),
+                  boxShadow: '0 0 15px rgba(0, 240, 255, 0.3)',
                 },
                 '&:active': {
-                  transform: 'translate(1px, 1px)',
-                  boxShadow: 'none',
+                  transform: 'scale(0.95)',
                 },
               }}
             >
@@ -218,33 +216,17 @@ export default function AppBar() {
             <IconButton
               onClick={handleAppsClick}
               sx={{
-                color: theme.palette.text.secondary,
+                color: '#A1A1AA',
                 display: { xs: 'none', sm: 'flex' },
-                borderRadius: 1,
+                borderRadius: 2,
                 p: 1.25,
                 '&:hover': {
                   backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                  color: '#F2F2F2',
                 }
               }}
             >
               <AppsIcon className="h-5 w-5" />
-            </IconButton>
-          </Tooltip>
-
-          {/* Theme Toggle */}
-          <Tooltip title={`Switch to ${mode === 'dark' ? 'light' : mode === 'light' ? 'system' : 'dark'} mode`}>
-            <IconButton
-              onClick={toggleMode}
-              sx={{
-                color: theme.palette.text.secondary,
-                borderRadius: 1,
-                p: 1.25,
-                '&:hover': {
-                  backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                }
-              }}
-            >
-              {mode === 'dark' ? <LightModeIcon className="h-5 w-5" /> : <DarkModeIcon className="h-5 w-5" />}
             </IconButton>
           </Tooltip>
 
@@ -253,23 +235,25 @@ export default function AppBar() {
             <IconButton
               onClick={handleNotifClick}
               sx={{
-                color: theme.palette.text.secondary,
-                borderRadius: 1,
+                color: '#A1A1AA',
+                borderRadius: 2,
                 p: 1.25,
                 '&:hover': {
                   backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                  color: '#F2F2F2',
                 }
               }}
             >
               <Badge
                 badgeContent={3}
-                color="error"
+                color="primary"
                 sx={{
                   '& .MuiBadge-badge': {
                     fontFamily: 'var(--font-mono)',
                     fontWeight: 800,
                     fontSize: '0.65rem',
-                    borderRadius: 0,
+                    backgroundColor: '#00F0FF',
+                    color: '#000000',
                   }
                 }}
               >
@@ -281,39 +265,22 @@ export default function AppBar() {
           {/* Profile */}
           <Tooltip title="User Profile">
             <IconButton onClick={handleProfileClick} sx={{ ml: 0.5 }}>
-              <Badge
-                overlap="circular"
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                badgeContent={
-                  <Box
-                    sx={{
-                      width: 10,
-                      height: 10,
-                      bgcolor: '#10b981',
-                      borderRadius: '50%',
-                      border: `2px solid ${theme.palette.background.default}`,
-                      boxShadow: '0 0 4px rgba(16, 185, 129, 0.5)'
-                    }}
-                  />
-                }
+              <Avatar
+                variant="rounded"
+                sx={{
+                  width: 38,
+                  height: 38,
+                  borderRadius: 1.5,
+                  bgcolor: '#141414',
+                  color: '#00F0FF',
+                  fontSize: '0.85rem',
+                  fontFamily: 'var(--font-mono)',
+                  fontWeight: 700,
+                  border: '1px solid #222222',
+                }}
               >
-                <Avatar
-                  variant="rounded"
-                  sx={{
-                    width: 38,
-                    height: 38,
-                    borderRadius: 1,
-                    bgcolor: theme.palette.primary.main,
-                    color: '#1B1C20',
-                    fontSize: '0.9rem',
-                    fontFamily: 'var(--font-mono)',
-                    fontWeight: 800,
-                    boxShadow: '2px 2px 0 rgba(0,0,0,0.5)',
-                  }}
-                >
-                  {getInitials(user)}
-                </Avatar>
-              </Badge>
+                {getInitials(user)}
+              </Avatar>
             </IconButton>
           </Tooltip>
         </Box>

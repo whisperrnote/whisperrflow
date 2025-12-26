@@ -7,10 +7,7 @@ import {
   Paper,
   Typography,
   LinearProgress,
-  Avatar,
-  AvatarGroup,
   Chip,
-  IconButton,
   Button,
   useTheme,
   alpha,
@@ -25,10 +22,9 @@ import {
   ArrowRight as ArrowIcon,
   Lightbulb as TipIcon,
   Flame as StreakIcon,
-  Trophy as TrophyIcon,
 } from 'lucide-react';
 import { useTask } from '@/context/TaskContext';
-import { format, isToday, isTomorrow, isPast, startOfWeek, endOfWeek, isWithinInterval } from 'date-fns';
+import { format, isToday, isTomorrow, isPast } from 'date-fns';
 import TaskItem from '@/components/tasks/TaskItem';
 
 interface StatCardProps {
@@ -45,82 +41,53 @@ interface StatCardProps {
 }
 
 function StatCard({ title, value, subtitle, icon, color, trend, onClick }: StatCardProps) {
-  const theme = useTheme();
-
   return (
     <Paper
       onClick={onClick}
       sx={{
         p: 2.5,
-        borderRadius: 1,
+        borderRadius: 2,
         cursor: onClick ? 'pointer' : 'default',
-        border: `1px solid ${alpha(color, 0.2)}`,
-        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        backgroundColor: 'rgba(10, 10, 10, 0.7)',
+        backdropFilter: 'blur(20px) saturate(180%)',
+        border: '1px solid rgba(255, 255, 255, 0.08)',
+        transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
         position: 'relative',
         overflow: 'hidden',
-        '&::before': {
-          content: '""',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          height: 3,
-          background: `linear-gradient(90deg, ${color}, ${alpha(color, 0.5)})`,
-          opacity: 0,
-          transition: 'opacity 0.3s ease',
-        },
         '&:hover': onClick
           ? {
-            borderColor: alpha(color, 0.5),
+            borderColor: '#404040',
             transform: 'translateY(-4px)',
-            boxShadow: `0 12px 28px ${alpha(color, 0.18)}`,
-            '&::before': {
-              opacity: 1,
-            },
+            backgroundColor: 'rgba(20, 20, 20, 0.8)',
           }
           : {},
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
         <Box>
-          <Typography variant="body2" color="text.secondary" gutterBottom sx={{ fontWeight: 500 }}>
+          <Typography variant="caption" sx={{ color: '#A1A1AA', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', mb: 1, display: 'block' }}>
             {title}
           </Typography>
-          <Typography variant="h4" fontWeight={900} sx={{ color, fontFamily: 'var(--font-mono)' }}>
+          <Typography variant="h4" fontWeight={800} sx={{ color: '#F2F2F2', fontFamily: 'var(--font-mono)', mb: 0.5 }}>
             {value}
           </Typography>
           {subtitle && (
-            <Typography variant="caption" color="text.secondary" sx={{ opacity: 0.8 }}>
+            <Typography variant="caption" sx={{ color: '#404040', fontWeight: 500 }}>
               {subtitle}
             </Typography>
-          )}
-          {trend && (
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 1 }}>
-              {trend.isPositive ? (
-                <TrendingUpIcon size={16} color={theme.palette.success.main} />
-              ) : (
-                <TrendingDownIcon size={16} color={theme.palette.error.main} />
-              )}
-              <Typography
-                variant="caption"
-                sx={{ color: trend.isPositive ? 'success.main' : 'error.main', fontWeight: 500 }}
-              >
-                {trend.value}% from last week
-              </Typography>
-            </Box>
           )}
         </Box>
         <Box
           sx={{
-            width: 52,
-            height: 52,
-            borderRadius: 2.5,
-            background: `linear-gradient(135deg, ${alpha(color, 0.15)}, ${alpha(color, 0.08)})`,
+            width: 48,
+            height: 48,
+            borderRadius: 1.5,
+            backgroundColor: alpha(color, 0.1),
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            color,
-            boxShadow: `0 4px 12px ${alpha(color, 0.15)}`,
+            color: color,
+            border: `1px solid ${alpha(color, 0.2)}`,
           }}
         >
           {icon}
@@ -132,20 +99,17 @@ function StatCard({ title, value, subtitle, icon, color, trend, onClick }: StatC
 
 export default function Dashboard() {
   const theme = useTheme();
-  const { tasks, projects, setFilter, setTaskDialogOpen, selectTask } = useTask();
+  const { tasks, setFilter, setTaskDialogOpen } = useTask();
 
   // Calculate stats
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const tomorrow = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
-  const weekStart = startOfWeek(now);
-  const weekEnd = endOfWeek(now);
 
   const {
     activeTasks,
     completedTasks,
-    incompleteTasks,
     overdueTasks,
     todayTasks,
     tomorrowTasks,
@@ -153,8 +117,6 @@ export default function Dashboard() {
     urgentTasks,
     highPriorityTasks,
     completionRate,
-    recentTasks,
-    upcomingTasks
   } = React.useMemo(() => {
     const active = tasks.filter((t) => !t.isArchived);
     const completed = active.filter((t) => t.status === 'done');
@@ -180,19 +142,9 @@ export default function Dashboard() {
       ? Math.round((completed.length / active.length) * 100)
       : 0;
 
-    const recent = [...incomplete]
-      .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
-      .slice(0, 5);
-
-    const upcoming = [...incomplete]
-      .filter((t) => t.dueDate)
-      .sort((a, b) => new Date(a.dueDate!).getTime() - new Date(b.dueDate!).getTime())
-      .slice(0, 5);
-
     return {
       activeTasks: active,
       completedTasks: completed,
-      incompleteTasks: incomplete,
       overdueTasks: overdue,
       todayTasks: todayT,
       tomorrowTasks: tomorrowT,
@@ -200,8 +152,6 @@ export default function Dashboard() {
       urgentTasks: urgent,
       highPriorityTasks: highPriority,
       completionRate: rate,
-      recentTasks: recent,
-      upcomingTasks: upcoming
     };
   }, [tasks]);
 
@@ -236,7 +186,7 @@ export default function Dashboard() {
         });
         break;
     }
-  };
+  }, [setFilter, today, tomorrow]);
 
   const productivityTips = [
     'Focus on one task at a time to increase efficiency.',
@@ -251,60 +201,59 @@ export default function Dashboard() {
     <Box>
       {/* Welcome Section */}
       <Box sx={{ mb: 4 }}>
-        <Typography variant="h4" fontWeight={900} gutterBottom sx={{ fontFamily: 'var(--font-mono)', letterSpacing: '-0.02em' }}>
+        <Typography variant="h1" sx={{ mb: 1 }}>
           Welcome back.
         </Typography>
-        <Typography variant="body1" color="text.secondary">
+        <Typography variant="body1" sx={{ color: '#A1A1AA' }}>
           {format(now, 'EEEE, MMMM d, yyyy')} • You have{' '}
-          <strong>{todayTasks.length} tasks</strong> due today
+          <span style={{ color: '#00F0FF', fontWeight: 700 }}>{todayTasks.length} tasks</span> due today
           {overdueTasks.length > 0 && (
             <>
-              {' '}and <strong style={{ color: theme.palette.error.main }}>{overdueTasks.length} overdue</strong>
+              {' '}and <span style={{ color: '#ef4444', fontWeight: 700 }}>{overdueTasks.length} overdue</span>
             </>
           )}
         </Typography>
       </Box>
 
       {/* Stats Grid */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+      <Grid container spacing={2} sx={{ mb: 4 }}>
+        <Grid item xs={12} sm={6} md={3}>
           <StatCard
             title="Due Today"
             value={todayTasks.length}
             subtitle={`${tomorrowTasks.length} due tomorrow`}
-            icon={<ScheduleIcon />}
-            color={theme.palette.info.main}
+            icon={<ScheduleIcon size={20} />}
+            color="#00F0FF"
             onClick={() => handleViewTasks('today')}
           />
         </Grid>
-        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+        <Grid item xs={12} sm={6} md={3}>
           <StatCard
             title="Overdue"
             value={overdueTasks.length}
             subtitle="Need attention"
-            icon={<WarningIcon />}
-            color={theme.palette.error.main}
+            icon={<WarningIcon size={20} />}
+            color="#ef4444"
             onClick={() => handleViewTasks('overdue')}
           />
         </Grid>
-        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+        <Grid item xs={12} sm={6} md={3}>
           <StatCard
             title="In Progress"
             value={inProgressTasks.length}
             subtitle={`${urgentTasks.length} urgent`}
-            icon={<FlagIcon />}
-            color={theme.palette.warning.main}
+            icon={<FlagIcon size={20} />}
+            color="#f59e0b"
             onClick={() => handleViewTasks('in-progress')}
           />
         </Grid>
-        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+        <Grid item xs={12} sm={6} md={3}>
           <StatCard
             title="Completed"
             value={completedTasks.length}
             subtitle={`${completionRate}% completion rate`}
-            icon={<CheckIcon />}
-            color={theme.palette.success.main}
-            trend={{ value: 12, isPositive: true }}
+            icon={<CheckIcon size={20} />}
+            color="#10b981"
           />
         </Grid>
       </Grid>
@@ -312,7 +261,7 @@ export default function Dashboard() {
       {/* Main Content Grid */}
       <Grid container spacing={3}>
         {/* Left Column */}
-        <Grid size={{ xs: 12, lg: 8 }}>
+        <Grid item xs={12} lg={8}>
           {/* Priority Tasks */}
           {(urgentTasks.length > 0 || highPriorityTasks.length > 0) && (
             <Paper
@@ -320,25 +269,38 @@ export default function Dashboard() {
                 p: 3,
                 mb: 3,
                 borderRadius: 3,
-                border: `1px solid ${theme.palette.divider}`,
+                backgroundColor: 'rgba(10, 10, 10, 0.5)',
+                border: '1px solid #222222',
               }}
             >
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <FlagIcon color={theme.palette.error.main} />
-                  <Typography variant="h6" fontWeight={600}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                  <FlagIcon size={20} color="#ef4444" />
+                  <Typography variant="h3" sx={{ fontSize: '18px' }}>
                     Priority Tasks
                   </Typography>
-                  <Chip label={urgentTasks.length + highPriorityTasks.length} size="small" color="error" />
+                  <Chip 
+                    label={urgentTasks.length + highPriorityTasks.length} 
+                    size="small" 
+                    sx={{ 
+                      bgcolor: 'rgba(239, 68, 68, 0.1)', 
+                      color: '#ef4444', 
+                      fontWeight: 700,
+                      borderRadius: 1,
+                      border: '1px solid rgba(239, 68, 68, 0.2)'
+                    }} 
+                  />
                 </Box>
                 <Button
-                  endIcon={<ArrowIcon size={16} />}
+                  size="small"
+                  endIcon={<ArrowIcon size={14} />}
                   onClick={() => handleViewTasks('urgent')}
+                  sx={{ color: '#A1A1AA' }}
                 >
                   View All
                 </Button>
               </Box>
-              <Box>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
                 {[...urgentTasks, ...highPriorityTasks].slice(0, 3).map((task) => (
                   <TaskItem key={task.id} task={task} compact />
                 ))}
@@ -352,37 +314,51 @@ export default function Dashboard() {
               p: 3,
               mb: 3,
               borderRadius: 3,
-              border: `1px solid ${theme.palette.divider}`,
+              backgroundColor: 'rgba(10, 10, 10, 0.5)',
+              border: '1px solid #222222',
             }}
           >
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <ScheduleIcon color={theme.palette.primary.main} />
-                <Typography variant="h6" fontWeight={600}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                <ScheduleIcon size={20} color="#00F0FF" />
+                <Typography variant="h3" sx={{ fontSize: '18px' }}>
                   Today&apos;s Tasks
                 </Typography>
-                <Chip label={todayTasks.length} size="small" color="primary" />
+                <Chip 
+                  label={todayTasks.length} 
+                  size="small" 
+                  sx={{ 
+                    bgcolor: 'rgba(0, 240, 255, 0.1)', 
+                    color: '#00F0FF', 
+                    fontWeight: 700,
+                    borderRadius: 1,
+                    border: '1px solid rgba(0, 240, 255, 0.2)'
+                  }} 
+                />
               </Box>
               <Button
-                endIcon={<ArrowIcon size={16} />}
+                size="small"
+                endIcon={<ArrowIcon size={14} />}
                 onClick={() => handleViewTasks('today')}
+                sx={{ color: '#A1A1AA' }}
               >
                 View All
               </Button>
             </Box>
             {todayTasks.length > 0 ? (
-              <Box>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
                 {todayTasks.slice(0, 5).map((task) => (
                   <TaskItem key={task.id} task={task} compact />
                 ))}
               </Box>
             ) : (
-              <Box sx={{ textAlign: 'center', py: 4, color: 'text.secondary', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <CheckIcon size={48} style={{ marginBottom: 8, opacity: 0.5 }} />
-                <Typography>No tasks due today!</Typography>
+              <Box sx={{ textAlign: 'center', py: 6, color: '#404040', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <CheckIcon size={48} style={{ marginBottom: 16, opacity: 0.2 }} />
+                <Typography variant="body2" sx={{ fontWeight: 500 }}>No tasks due today!</Typography>
                 <Button
-                  variant="outlined"
-                  sx={{ mt: 2 }}
+                  variant="contained"
+                  size="small"
+                  sx={{ mt: 3 }}
                   onClick={() => setTaskDialogOpen(true)}
                 >
                   Add a Task
@@ -390,46 +366,29 @@ export default function Dashboard() {
               </Box>
             )}
           </Paper>
-
-          {/* Recent Activity */}
-          <Paper
-            sx={{
-              p: 3,
-              borderRadius: 3,
-              border: `1px solid ${theme.palette.divider}`,
-            }}
-          >
-            <Typography variant="h6" fontWeight={600} gutterBottom>
-              Recent Activity
-            </Typography>
-            <Box>
-              {recentTasks.map((task) => (
-                <TaskItem key={task.id} task={task} compact />
-              ))}
-            </Box>
-          </Paper>
         </Grid>
 
         {/* Right Column */}
-        <Grid size={{ xs: 12, lg: 4 }}>
+        <Grid item xs={12} lg={4}>
           {/* Progress Overview */}
           <Paper
             sx={{
               p: 3,
               mb: 3,
               borderRadius: 3,
-              border: `1px solid ${theme.palette.divider}`,
+              backgroundColor: 'rgba(10, 10, 10, 0.5)',
+              border: '1px solid #222222',
             }}
           >
-            <Typography variant="h6" fontWeight={600} gutterBottom>
+            <Typography variant="h3" sx={{ fontSize: '18px', mb: 3 }}>
               Weekly Progress
             </Typography>
-            <Box sx={{ mb: 2 }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                <Typography variant="body2" color="text.secondary">
-                  Tasks Completed
+            <Box sx={{ mb: 3 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1.5 }}>
+                <Typography variant="caption" sx={{ color: '#A1A1AA', fontWeight: 600 }}>
+                  TASKS COMPLETED
                 </Typography>
-                <Typography variant="body2" fontWeight={500}>
+                <Typography variant="caption" sx={{ color: '#F2F2F2', fontWeight: 700 }}>
                   {completedTasks.length}/{activeTasks.length}
                 </Typography>
               </Box>
@@ -437,35 +396,36 @@ export default function Dashboard() {
                 variant="determinate"
                 value={completionRate}
                 sx={{
-                  height: 8,
-                  borderRadius: 4,
-                  backgroundColor: alpha(theme.palette.success.main, 0.15),
+                  height: 6,
+                  borderRadius: 3,
+                  backgroundColor: '#141414',
                   '& .MuiLinearProgress-bar': {
-                    borderRadius: 4,
-                    backgroundColor: theme.palette.success.main,
+                    borderRadius: 3,
+                    backgroundColor: '#10b981',
                   },
                 }}
               />
             </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mt: 3 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, p: 2, borderRadius: 2, backgroundColor: 'rgba(245, 158, 11, 0.05)', border: '1px solid rgba(245, 158, 11, 0.1)' }}>
               <Box
                 sx={{
-                  width: 48,
-                  height: 48,
-                  borderRadius: 2,
-                  backgroundColor: alpha(theme.palette.warning.main, 0.12),
+                  width: 40,
+                  height: 40,
+                  borderRadius: 1.5,
+                  backgroundColor: 'rgba(245, 158, 11, 0.1)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
+                  color: '#f59e0b'
                 }}
               >
-                <StreakIcon color={theme.palette.warning.main} />
+                <StreakIcon size={20} />
               </Box>
               <Box>
-                <Typography variant="body2" color="text.secondary">
-                  Current Streak
+                <Typography variant="caption" sx={{ color: '#A1A1AA', fontWeight: 600, display: 'block' }}>
+                  CURRENT STREAK
                 </Typography>
-                <Typography variant="h5" fontWeight={700}>
+                <Typography variant="h5" fontWeight={800} sx={{ color: '#f59e0b' }}>
                   5 days 🔥
                 </Typography>
               </Box>
@@ -478,125 +438,19 @@ export default function Dashboard() {
               p: 3,
               mb: 3,
               borderRadius: 3,
-              backgroundColor: alpha(theme.palette.primary.main, 0.05),
-              border: `1px solid ${alpha(theme.palette.primary.main, 0.2)}`,
+              backgroundColor: 'rgba(0, 240, 255, 0.03)',
+              border: '1px solid rgba(0, 240, 255, 0.1)',
             }}
           >
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
-              <TipIcon color={theme.palette.primary.main} />
-              <Typography variant="subtitle2" fontWeight={800} color="primary" sx={{ fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5 }}>
+              <TipIcon size={18} color="#00F0FF" />
+              <Typography variant="caption" sx={{ fontWeight: 800, color: '#00F0FF', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
                 Productivity Tip
               </Typography>
             </Box>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2" sx={{ color: '#A1A1AA', lineHeight: 1.6 }}>
               {randomTip}
             </Typography>
-          </Paper>
-
-          {/* Upcoming Deadlines */}
-          <Paper
-            sx={{
-              p: 3,
-              mb: 3,
-              borderRadius: 3,
-              border: `1px solid ${theme.palette.divider}`,
-            }}
-          >
-            <Typography variant="h6" fontWeight={600} gutterBottom>
-              Upcoming Deadlines
-            </Typography>
-            {upcomingTasks.length > 0 ? (
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-                {upcomingTasks.map((task) => (
-                  <Box
-                    key={task.id}
-                    onClick={() => selectTask(task.id)}
-                    sx={{
-                      p: 1.5,
-                      borderRadius: 2,
-                      cursor: 'pointer',
-                      backgroundColor: alpha(theme.palette.text.primary, 0.02),
-                      '&:hover': {
-                        backgroundColor: alpha(theme.palette.primary.main, 0.05),
-                      },
-                    }}
-                  >
-                    <Typography variant="body2" fontWeight={500} noWrap>
-                      {task.title}
-                    </Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      {task.dueDate && format(new Date(task.dueDate), 'MMM d, yyyy')}
-                    </Typography>
-                  </Box>
-                ))}
-              </Box>
-            ) : (
-              <Typography variant="body2" color="text.secondary">
-                No upcoming deadlines
-              </Typography>
-            )}
-          </Paper>
-
-          {/* Projects Overview */}
-          <Paper
-            sx={{
-              p: 3,
-              borderRadius: 3,
-              border: `1px solid ${theme.palette.divider}`,
-            }}
-          >
-            <Typography variant="h6" fontWeight={600} gutterBottom>
-              Projects
-            </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-              {projects
-                .filter((p) => !p.isArchived && p.id !== 'inbox')
-                .slice(0, 4)
-                .map((project) => {
-                  const projectTasks = tasks.filter(
-                    (t) => t.projectId === project.id && !t.isArchived
-                  );
-                  const completedProjectTasks = projectTasks.filter(
-                    (t) => t.status === 'done'
-                  );
-                  const progress = projectTasks.length > 0
-                    ? Math.round((completedProjectTasks.length / projectTasks.length) * 100)
-                    : 0;
-
-                  return (
-                    <Box key={project.id}>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
-                        <Box
-                          sx={{
-                            width: 12,
-                            height: 12,
-                            borderRadius: '50%',
-                            backgroundColor: project.color,
-                          }}
-                        />
-                        <Typography variant="body2" fontWeight={500} sx={{ flexGrow: 1 }}>
-                          {project.name}
-                        </Typography>
-                        <Typography variant="caption" color="text.secondary">
-                          {completedProjectTasks.length}/{projectTasks.length}
-                        </Typography>
-                      </Box>
-                      <LinearProgress
-                        variant="determinate"
-                        value={progress}
-                        sx={{
-                          height: 4,
-                          borderRadius: 2,
-                          backgroundColor: alpha(project.color, 0.15),
-                          '& .MuiLinearProgress-bar': {
-                            backgroundColor: project.color,
-                          },
-                        }}
-                      />
-                    </Box>
-                  );
-                })}
-            </Box>
           </Paper>
         </Grid>
       </Grid>

@@ -37,9 +37,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
       sx={{
         display: 'flex',
         minHeight: '100vh',
-        background: theme.palette.mode === 'light'
-          ? '#f8f8f8'
-          : '#0f0f0f',
+        background: '#000000',
         position: 'relative',
         overflow: 'hidden',
       }}
@@ -75,16 +73,10 @@ export default function MainLayout({ children }: MainLayoutProps) {
       >
         <Box
           sx={{
-            background:
-              theme.palette.mode === 'light'
-                ? '#ffffff'
-                : '#1a1a1a',
-            borderRadius: { xs: 2, md: 4 },
-            border: `2px solid ${theme.palette.divider}`,
-            boxShadow:
-              theme.palette.mode === 'light'
-                ? '0 8px 32px rgba(0, 0, 0, 0.08)'
-                : '0 8px 32px rgba(0, 0, 0, 0.4)',
+            background: 'rgba(10, 10, 10, 0.7)',
+            backdropFilter: 'blur(20px) saturate(180%)',
+            borderRadius: { xs: 2, md: 3 },
+            border: '1px solid rgba(255, 255, 255, 0.08)',
             minHeight: '100%',
             p: { xs: 2, md: 4 },
             position: 'relative',
