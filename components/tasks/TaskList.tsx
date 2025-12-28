@@ -177,22 +177,22 @@ export default function TaskList() {
           >
             <ToggleButton value="list">
               <Tooltip title="List view">
-                <ListIcon size={20} />
+                <ListIcon sx={{ fontSize: 20 }} />
               </Tooltip>
             </ToggleButton>
             <ToggleButton value="board">
               <Tooltip title="Board view">
-                <BoardIcon size={20} />
+                <BoardIcon sx={{ fontSize: 20 }} />
               </Tooltip>
             </ToggleButton>
             <ToggleButton value="calendar">
               <Tooltip title="Calendar view">
-                <CalendarIcon size={20} />
+                <CalendarIcon sx={{ fontSize: 20 }} />
               </Tooltip>
             </ToggleButton>
             <ToggleButton value="timeline">
               <Tooltip title="Timeline view">
-                <TimelineIcon size={20} />
+                <TimelineIcon sx={{ fontSize: 20 }} />
               </Tooltip>
             </ToggleButton>
           </ToggleButtonGroup>
@@ -203,8 +203,8 @@ export default function TaskList() {
           <Button
             variant="text"
             size="small"
-            startIcon={<SortIcon size={18} />}
-            endIcon={<ExpandMoreIcon size={18} />}
+            startIcon={<SortIcon sx={{ fontSize: 18 }} />}
+            endIcon={<ExpandMoreIcon sx={{ fontSize: 18 }} />}
             onClick={handleSortClick}
             sx={{ textTransform: 'none' }}
           >
@@ -215,8 +215,8 @@ export default function TaskList() {
           <Button
             variant="text"
             size="small"
-            startIcon={<FilterIcon size={18} />}
-            endIcon={<ExpandMoreIcon size={18} />}
+            startIcon={<FilterIcon sx={{ fontSize: 18 }} />}
+            endIcon={<ExpandMoreIcon sx={{ fontSize: 18 }} />}
             onClick={handleFilterClick}
             sx={{ textTransform: 'none' }}
           >
@@ -235,7 +235,7 @@ export default function TaskList() {
           {/* Add Task */}
           <Button
             variant="contained"
-            startIcon={<AddIcon size={18} />}
+            startIcon={<AddIcon sx={{ fontSize: 18 }} />}
             onClick={() => setTaskDialogOpen(true)}
           >
             Add Task
@@ -260,9 +260,9 @@ export default function TaskList() {
             {sort.field === option.field && (
               <ListItemIcon sx={{ minWidth: 'auto', ml: 1 }}>
                 {sort.direction === 'asc' ? (
-                  <AscIcon size={18} />
+                  <AscIcon sx={{ fontSize: 18 }} />
                 ) : (
-                  <DescIcon size={18} />
+                  <DescIcon sx={{ fontSize: 18 }} />
                 )}
               </ListItemIcon>
             )}
@@ -297,7 +297,7 @@ export default function TaskList() {
             </ListItemIcon>
             <ListItemText>{item.label}</ListItemText>
             {filter.status?.includes(item.status) && (
-              <CheckIcon size={20} color={theme.palette.primary.main} />
+              <CheckIcon sx={{ fontSize: 20, color: theme.palette.primary.main }} />
             )}
           </MenuItem>
         ))}
@@ -306,13 +306,13 @@ export default function TaskList() {
           onClick={() => setFilter({ ...filter, showCompleted: !filter.showCompleted })}
         >
           <ListItemText>Show completed</ListItemText>
-          {filter.showCompleted && <CheckIcon size={20} color={theme.palette.primary.main} />}
+          {filter.showCompleted && <CheckIcon sx={{ fontSize: 20, color: theme.palette.primary.main }} />}
         </MenuItem>
         <MenuItem
           onClick={() => setFilter({ ...filter, showArchived: !filter.showArchived })}
         >
           <ListItemText>Show archived</ListItemText>
-          {filter.showArchived && <CheckIcon size={20} color={theme.palette.primary.main} />}
+          {filter.showArchived && <CheckIcon sx={{ fontSize: 20, color: theme.palette.primary.main }} />}
         </MenuItem>
         <Divider sx={{ my: 1 }} />
         <MenuItem
@@ -407,7 +407,7 @@ export default function TaskList() {
                   />
                 </Box>
                 <IconButton size="small" onClick={() => setTaskDialogOpen(true)}>
-                  <AddIcon size={20} />
+                  <AddIcon sx={{ fontSize: 20 }} />
                 </IconButton>
               </Box>
               <Box>
@@ -432,7 +432,7 @@ export default function TaskList() {
           }}
         >
           <Box sx={{ mb: 2, opacity: 0.5 }}>
-            <CalendarIcon size={64} />
+            <CalendarIcon sx={{ fontSize: 64 }} />
           </Box>
           <Typography variant="h6" gutterBottom>
             Calendar View
@@ -455,7 +455,7 @@ export default function TaskList() {
           }}
         >
           <Box sx={{ mb: 2, opacity: 0.5 }}>
-            <TimelineIcon size={64} />
+            <TimelineIcon sx={{ fontSize: 64 }} />
           </Box>
           <Typography variant="h6" gutterBottom>
             Timeline View

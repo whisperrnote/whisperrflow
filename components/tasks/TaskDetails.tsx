@@ -24,21 +24,21 @@ import {
   CircularProgress,
 } from '@mui/material';
 import {
-  X as CloseIcon,
+  Close as CloseIcon,
   Flag as FlagIcon,
-  Calendar as CalendarIcon,
-  Clock as ScheduleIcon,
-  Plus as AddIcon,
-  Trash2 as DeleteIcon,
-  Pencil as EditIcon,
+  CalendarMonth as CalendarIcon,
+  AccessTime as ScheduleIcon,
+  Add as AddIcon,
+  Delete as DeleteIcon,
+  Edit as EditIcon,
   Folder as FolderIcon,
-  Tag as LabelIcon,
-  FileText as NotesIcon,
-  CalendarDays as EventIcon,
-  Video as MeetingIcon,
+  LocalOffer as LabelIcon,
+  Description as NotesIcon,
+  CalendarToday as EventIcon,
+  VideoCall as MeetingIcon,
   Send as SendIcon,
-  Wand2 as AutoFixHighIcon,
-} from 'lucide-react';
+  AutoFixHigh as AutoFixHighIcon,
+} from '@mui/icons-material';
 import { format } from 'date-fns';
 import { useTask } from '@/context/TaskContext';
 import { Priority, TaskStatus } from '@/types';
@@ -208,10 +208,10 @@ export default function TaskDetails({ taskId }: TaskDetailsProps) {
         </Box>
         <Box>
           <IconButton size="small" onClick={handleStartEdit}>
-            <EditIcon size={20} />
+            <EditIcon sx={{ fontSize: 20 }} />
           </IconButton>
           <IconButton size="small" onClick={closeSecondarySidebar}>
-            <CloseIcon size={20} />
+            <CloseIcon sx={{ fontSize: 20 }} />
           </IconButton>
         </Box>
       </Box>
@@ -271,7 +271,7 @@ export default function TaskDetails({ taskId }: TaskDetailsProps) {
           {/* Project */}
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 100 }}>
-              <FolderIcon size={18} color={theme.palette.action.active} />
+              <FolderIcon sx={{ fontSize: 18, color: theme.palette.action.active }} />
               <Typography variant="body2" color="text.secondary">
                 Project
               </Typography>
@@ -289,13 +289,13 @@ export default function TaskDetails({ taskId }: TaskDetailsProps) {
           {/* Priority */}
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 100 }}>
-              <FlagIcon size={18} color={theme.palette.action.active} />
+              <FlagIcon sx={{ fontSize: 18, color: theme.palette.action.active }} />
               <Typography variant="body2" color="text.secondary">
                 Priority
               </Typography>
             </Box>
             <Chip
-              icon={<FlagIcon size={16} color={priorityColors[task.priority]} />}
+              icon={<FlagIcon sx={{ fontSize: 16, color: priorityColors[task.priority] }} />}
               label={task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}
               size="small"
               onClick={(e) => setPriorityAnchor(e.currentTarget)}
@@ -310,7 +310,7 @@ export default function TaskDetails({ taskId }: TaskDetailsProps) {
           {/* Due Date */}
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 100 }}>
-              <CalendarIcon size={18} color={theme.palette.action.active} />
+              <CalendarIcon sx={{ fontSize: 18, color: theme.palette.action.active }} />
               <Typography variant="body2" color="text.secondary">
                 Due date
               </Typography>
@@ -324,7 +324,7 @@ export default function TaskDetails({ taskId }: TaskDetailsProps) {
           {taskLabels.length > 0 && (
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 100 }}>
-                <LabelIcon size={18} color={theme.palette.action.active} />
+                <LabelIcon sx={{ fontSize: 18, color: theme.palette.action.active }} />
                 <Typography variant="body2" color="text.secondary">
                   Labels
                 </Typography>
@@ -348,7 +348,7 @@ export default function TaskDetails({ taskId }: TaskDetailsProps) {
           {/* Created */}
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 100 }}>
-              <ScheduleIcon size={18} color={theme.palette.action.active} />
+              <ScheduleIcon sx={{ fontSize: 18, color: theme.palette.action.active }} />
               <Typography variant="body2" color="text.secondary">
                 Created
               </Typography>
@@ -403,7 +403,7 @@ export default function TaskDetails({ taskId }: TaskDetailsProps) {
                     size="small"
                     onClick={() => deleteSubtask(task.id, subtask.id)}
                   >
-                    <DeleteIcon size={20} />
+                    <DeleteIcon sx={{ fontSize: 20 }} />
                   </IconButton>
                 }
               >
@@ -442,10 +442,10 @@ export default function TaskDetails({ taskId }: TaskDetailsProps) {
                 color="primary"
                 title="Generate subtasks with AI"
             >
-                {isGeneratingSubtasks ? <CircularProgress size={20} /> : <AutoFixHighIcon size={20} />}
+                {isGeneratingSubtasks ? <CircularProgress size={20} /> : <AutoFixHighIcon sx={{ fontSize: 20 }} />}
             </IconButton>
             <IconButton size="small" onClick={handleAddSubtask} disabled={!newSubtask.trim()}>
-              <AddIcon size={20} />
+              <AddIcon sx={{ fontSize: 20 }} />
             </IconButton>
           </Box>
         </Box>
@@ -461,7 +461,7 @@ export default function TaskDetails({ taskId }: TaskDetailsProps) {
             <Button
               variant="outlined"
               size="small"
-              startIcon={<NotesIcon size={18} />}
+              startIcon={<NotesIcon sx={{ fontSize: 18 }} />}
               sx={{ justifyContent: 'flex-start', textTransform: 'none' }}
             >
               Link to WhisperrNote
@@ -469,7 +469,7 @@ export default function TaskDetails({ taskId }: TaskDetailsProps) {
             <Button
               variant="outlined"
               size="small"
-              startIcon={<EventIcon size={18} />}
+              startIcon={<EventIcon sx={{ fontSize: 18 }} />}
               sx={{ justifyContent: 'flex-start', textTransform: 'none' }}
             >
               Link to WhisperrEvents
@@ -477,7 +477,7 @@ export default function TaskDetails({ taskId }: TaskDetailsProps) {
             <Button
               variant="outlined"
               size="small"
-              startIcon={<MeetingIcon size={18} />}
+              startIcon={<MeetingIcon sx={{ fontSize: 18 }} />}
               sx={{ justifyContent: 'flex-start', textTransform: 'none' }}
             >
               Link to WhisperrMeet
@@ -485,7 +485,7 @@ export default function TaskDetails({ taskId }: TaskDetailsProps) {
             <Button
               variant="outlined"
               size="small"
-              startIcon={<CalendarIcon size={18} />}
+              startIcon={<CalendarIcon sx={{ fontSize: 18 }} />}
               sx={{ justifyContent: 'flex-start', textTransform: 'none' }}
             >
               Add to WhisperrCal
@@ -548,7 +548,7 @@ export default function TaskDetails({ taskId }: TaskDetailsProps) {
               disabled={!newComment.trim()}
               color="primary"
             >
-              <SendIcon size={20} />
+              <SendIcon sx={{ fontSize: 20 }} />
             </IconButton>
           </Box>
         </Box>
@@ -584,7 +584,7 @@ export default function TaskDetails({ taskId }: TaskDetailsProps) {
             selected={task.priority === priority}
           >
             <Box component="span" sx={{ mr: 1, display: 'flex', alignItems: 'center' }}>
-              <FlagIcon color={priorityColors[priority]} size={18} />
+              <FlagIcon sx={{ fontSize: 18, color: priorityColors[priority] }} />
             </Box>
             {priority.charAt(0).toUpperCase() + priority.slice(1)}
           </MenuItem>
