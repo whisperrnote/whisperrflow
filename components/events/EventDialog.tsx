@@ -20,14 +20,14 @@ import {
   alpha,
 } from '@mui/material';
 import {
-  X as CloseIcon,
-  MapPin as LocationOn,
+  Close as CloseIcon,
+  LocationOn,
   Link as LinkIcon,
   Image as ImageIcon,
-  Globe as PublicIcon,
+  Public as PublicIcon,
   Lock as PrivateIcon,
-  Link2Off as UnlistedIcon,
-} from 'lucide-react';
+  LinkOff as UnlistedIcon,
+} from '@mui/icons-material';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
