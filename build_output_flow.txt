@@ -1,0 +1,51 @@
+
+> whisperrflow@0.1.0 build
+> next build --webpack
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+ ⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of /home/nathfavour/code/whisperrnote/package-lock.json as the root directory.
+ To silence this warning, set `outputFileTracingRoot` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/output#caveats for more information.
+ Detected additional lockfiles: 
+   * /home/nathfavour/code/whisperrnote/whisperrflow/pnpm-lock.yaml
+
+   ▲ Next.js 16.0.4 (webpack)
+   - Experiments (use with caution):
+     · optimizePackageImports
+
+   Creating an optimized production build ...
+ ⚠ Compiled with warnings in 39.9s
+
+./theme/index.ts
+export 'useThemeMode' (reexported as 'useThemeMode') was not found in './ThemeProvider' (possible exports: ThemeProvider)
+
+Import trace for requested module:
+./theme/index.ts
+./providers.tsx
+
+./theme/index.ts
+export 'useThemeMode' (reexported as 'useThemeMode') was not found in './ThemeProvider' (possible exports: ThemeProvider)
+
+Import trace for requested module:
+./theme/index.ts
+./providers.tsx
+
+   Running TypeScript ...
+Failed to compile.
+
+./components/ai/AICommandModal.tsx:211:26
+Type error: No overload matches this call.
+  Overload 1 of 2, '(props: { component: ElementType<any, keyof IntrinsicElements>; } & SvgIconOwnProps & CommonProps & Omit<any, "className" | ... 10 more ... | "viewBox">): Element | null', gave the following error.
+    Type 'string' is not assignable to type 'OverridableStringUnion<"error" | "inherit" | "action" | "disabled" | "primary" | "secondary" | "info" | "success" | "warning", SvgIconPropsColorOverrides> | undefined'.
+  Overload 2 of 2, '(props: DefaultComponentProps<SvgIconTypeMap<{}, "svg">>): Element | null', gave the following error.
+    Type 'string' is not assignable to type 'OverridableStringUnion<"error" | "inherit" | "action" | "disabled" | "primary" | "secondary" | "info" | "success" | "warning", SvgIconPropsColorOverrides> | undefined'.
+
+[0m [90m 209 |[39m     [33m>[39m
+ [90m 210 |[39m       [33m<[39m[33mDialogTitle[39m sx[33m=[39m{{ display[33m:[39m [32m'flex'[39m[33m,[39m alignItems[33m:[39m [32m'center'[39m[33m,[39m gap[33m:[39m [35m1[39m }}[33m>[39m
+[31m[1m>[22m[39m[90m 211 |[39m         [33m<[39m[33mAutoAwesomeIcon[39m color[33m=[39m{theme[33m.[39mpalette[33m.[39msecondary[33m.[39mmain} [33m/[39m[33m>[39m
+ [90m     |[39m                          [31m[1m^[22m[39m
+ [90m 212 |[39m         [33m<[39m[33mTypography[39m variant[33m=[39m[32m"h6"[39m fontWeight[33m=[39m{[35m600[39m}[33m>[39m
+ [90m 213 |[39m           [33mAI[39m [33mAssistant[39m
+ [90m 214 |[39m         [33m<[39m[33m/[39m[33mTypography[39m[33m>[39m[0m
+Next.js build worker exited with code: 1 and signal: null
