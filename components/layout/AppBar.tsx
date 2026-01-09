@@ -357,7 +357,7 @@ export default function AppBar() {
             <ListItemIcon>
               <SettingsIcon sx={{ fontSize: 20 }} />
             </ListItemIcon>
-            <ListItemText primaryTypographyProps={{ fontWeight: 600 }}>Vault Settings</ListItemText>
+            <ListItemText primaryTypographyProps={{ fontWeight: 600 }}>Settings</ListItemText>
           </MenuItem>
           <MenuItem
             sx={{ py: 1.2, '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.05)' } }}
