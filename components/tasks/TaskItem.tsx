@@ -41,16 +41,16 @@ interface TaskItemProps {
 
 const priorityColors: Record<Priority, string> = {
   low: '#A1A1AA',
-  medium: '#00F0FF',
-  high: '#f59e0b',
-  urgent: '#ef4444',
+  medium: '#00F5FF',
+  high: '#F59E0B',
+  urgent: '#EF4444',
 };
 
 const priorityLabels: Record<Priority, string> = {
-  low: 'Low',
-  medium: 'Medium',
-  high: 'High',
-  urgent: 'Urgent',
+  low: 'LOW',
+  medium: 'MED',
+  high: 'HIGH',
+  urgent: 'URGENT',
 };
 
 export default React.memo(function TaskItem({ task, onClick, compact = false }: TaskItemProps) {
@@ -106,8 +106,7 @@ export default React.memo(function TaskItem({ task, onClick, compact = false }: 
 
   return (
     <>
-      <Paper
-        elevation={0}
+      <Box
         onClick={() => {
           selectTask(task.id);
           openSecondarySidebar('task', task.id);
@@ -116,22 +115,35 @@ export default React.memo(function TaskItem({ task, onClick, compact = false }: 
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         sx={{
-          p: compact ? 1.5 : 2,
-          mb: 1,
+          p: compact ? 2 : 2.5,
+          mb: 1.5,
           cursor: 'pointer',
-          borderRadius: 2,
-          backgroundColor: isHovered ? 'rgba(20, 20, 20, 0.8)' : 'rgba(10, 10, 10, 0.5)',
-          backdropFilter: 'blur(10px)',
+          borderRadius: 3,
+          backgroundColor: isHovered ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.02)',
           border: '1px solid',
-          borderColor: isHovered ? 'rgba(255, 255, 255, 0.15)' : 'rgba(255, 255, 255, 0.05)',
-          opacity: task.status === 'done' ? 0.5 : 1,
-          transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+          borderColor: isHovered ? 'rgba(0, 245, 255, 0.2)' : 'rgba(255, 255, 255, 0.05)',
+          opacity: task.status === 'done' ? 0.6 : 1,
+          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+          position: 'relative',
           '&:hover': {
-            transform: 'translateX(4px)',
+            transform: 'translateY(-2px)',
+            boxShadow: '0 12px 24px rgba(0, 0, 0, 0.4)',
           },
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            left: 0,
+            top: '25%',
+            bottom: '25%',
+            width: 3,
+            borderRadius: '0 4px 4px 0',
+            backgroundColor: priorityColors[task.priority],
+            opacity: isHovered ? 1 : 0.4,
+            transition: 'all 0.3s',
+          }
         }}
       >
-        <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.5 }}>
+        <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 2 }}>
           {/* Checkbox */}
           <Checkbox
             checked={task.status === 'done'}
@@ -139,40 +151,76 @@ export default React.memo(function TaskItem({ task, onClick, compact = false }: 
             sx={{
               p: 0,
               mt: 0.25,
-              color: 'rgba(255, 255, 255, 0.2)',
+              color: 'rgba(255, 255, 255, 0.1)',
               '&.Mui-checked': {
-                color: '#00F0FF',
+                color: '#00F5FF',
               },
               '&:hover': {
-                backgroundColor: 'rgba(0, 240, 255, 0.05)',
+                backgroundColor: 'rgba(0, 245, 255, 0.05)',
               }
             }}
           />
 
           {/* Main Content */}
           <Box sx={{ flexGrow: 1, minWidth: 0 }}>
-            {/* Title */}
-            <Typography
-              variant="body1"
-              sx={{
-                fontWeight: 600,
-                fontSize: '0.95rem',
-                color: task.status === 'done' ? '#404040' : '#F2F2F2',
-                textDecoration: task.status === 'done' ? 'line-through' : 'none',
-                mb: 0.5,
-              }}
-            >
-              {task.title}
-            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 0.5 }}>
+                {/* Title */}
+                <Typography
+                    variant="body1"
+                    sx={{
+                        fontWeight: 700,
+                        fontSize: '1rem',
+                        color: task.status === 'done' ? 'text.disabled' : '#F2F2F2',
+                        textDecoration: task.status === 'done' ? 'line-through' : 'none',
+                        letterSpacing: '-0.01em',
+                    }}
+                >
+                    {task.title}
+                </Typography>
+
+                <Box sx={{ display: 'flex', gap: 0.5, alignItems: 'center' }}>
+                    {/* Indicators */}
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mr: 1 }}>
+                        {totalSubtasks > 0 && (
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, opacity: 0.4 }}>
+                            <SubtaskIcon sx={{ fontSize: 14 }} />
+                            <Typography variant="caption" sx={{ fontWeight: 800 }}>{completedSubtasks}/{totalSubtasks}</Typography>
+                        </Box>
+                        )}
+                        {task.comments.length > 0 && (
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, opacity: 0.4 }}>
+                            <CommentIcon sx={{ fontSize: 13 }} />
+                            <Typography variant="caption" sx={{ fontWeight: 800 }}>{task.comments.length}</Typography>
+                        </Box>
+                        )}
+                    </Box>
+
+                    {/* Menu Trigger */}
+                    <IconButton 
+                        size="small" 
+                        onClick={handleMenuClick}
+                        sx={{ 
+                            p: 0.5, 
+                            color: 'text.disabled',
+                            opacity: isHovered ? 1 : 0,
+                            transition: 'opacity 0.2s',
+                            '&:hover': { color: '#F2F2F2' }
+                        }}
+                    >
+                        <MoreIcon sx={{ fontSize: 18 }} />
+                    </IconButton>
+                </Box>
+            </Box>
 
             {/* Description (if not compact) */}
             {!compact && task.description && (
               <Typography
                 variant="body2"
                 sx={{
-                  color: '#A1A1AA',
+                  color: 'text.secondary',
                   fontSize: '0.85rem',
-                  mb: 1.5,
+                  lineHeight: 1.5,
+                  mb: 2,
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   display: '-webkit-box',
@@ -184,79 +232,55 @@ export default React.memo(function TaskItem({ task, onClick, compact = false }: 
               </Typography>
             )}
 
-            {/* Meta Info */}
+            {/* Meta Footer */}
             <Box
               sx={{
                 display: 'flex',
                 flexWrap: 'wrap',
                 alignItems: 'center',
-                gap: 1,
+                gap: 2,
               }}
             >
-              {/* Project */}
+              {/* Project Badge */}
               {project && project.id !== 'inbox' && (
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, px: 1, py: 0.25, borderRadius: 1, backgroundColor: alpha(project.color, 0.1), border: `1px solid ${alpha(project.color, 0.2)}` }}>
-                  <Box sx={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: project.color }} />
-                  <Typography variant="caption" sx={{ color: project.color, fontWeight: 700, fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                    {project.name}
-                  </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <Box sx={{ width: 6, height: 6, borderRadius: '50%', bgcolor: project.color }} />
+                    <Typography variant="caption" sx={{ fontWeight: 800, color: 'text.secondary', letterSpacing: '0.05em' }}>
+                        {project.name.toUpperCase()}
+                    </Typography>
                 </Box>
               )}
 
-              {/* Priority */}
-              {task.priority !== 'medium' && (
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, px: 1, py: 0.25, borderRadius: 1, backgroundColor: alpha(priorityColors[task.priority], 0.1), border: `1px solid ${alpha(priorityColors[task.priority], 0.2)}` }}>
-                  <FlagIcon sx={{ fontSize: 10, color: priorityColors[task.priority] }} />
-                  <Typography variant="caption" sx={{ color: priorityColors[task.priority], fontWeight: 700, fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                    {priorityLabels[task.priority]}
-                  </Typography>
-                </Box>
-              )}
-
-              {/* Due Date */}
-              {task.dueDate && (
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, px: 1, py: 0.25, borderRadius: 1, backgroundColor: alpha(getDueDateColor(), 0.05), border: `1px solid ${alpha(getDueDateColor(), 0.1)}` }}>
-                  <ScheduleIcon sx={{ fontSize: 10, color: getDueDateColor() }} />
-                  <Typography variant="caption" sx={{ color: getDueDateColor(), fontWeight: 700, fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                    {formatDueDate(new Date(task.dueDate))}
-                  </Typography>
-                </Box>
-              )}
-
-              {/* Indicators */}
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, ml: 'auto' }}>
-                {totalSubtasks > 0 && (
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, color: '#404040' }}>
-                    <SubtaskIcon sx={{ fontSize: 12 }} />
-                    <Typography variant="caption" sx={{ fontWeight: 600 }}>{completedSubtasks}/{totalSubtasks}</Typography>
-                  </Box>
-                )}
-                {task.comments.length > 0 && (
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, color: '#404040' }}>
-                    <CommentIcon sx={{ fontSize: 12 }} />
-                    <Typography variant="caption" sx={{ fontWeight: 600 }}>{task.comments.length}</Typography>
-                  </Box>
-                )}
+              {/* Priority Indicator */}
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
+                   <FlagIcon sx={{ fontSize: 12, color: priorityColors[task.priority] }} />
+                   <Typography variant="caption" sx={{ color: priorityColors[task.priority], fontWeight: 800 }}>
+                        {priorityLabels[task.priority]}
+                   </Typography>
               </Box>
+
+              {/* Deadline */}
+              {task.dueDate && (
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
+                  <ScheduleIcon sx={{ fontSize: 12, color: getDueDateColor() }} />
+                  <Typography variant="caption" sx={{ color: getDueDateColor(), fontWeight: 800 }}>
+                    {formatDueDate(new Date(task.dueDate)).toUpperCase()}
+                  </Typography>
+                </Box>
+              )}
+
+              {/* Space for labels if any */}
+              {taskLabels.length > 0 && (
+                  <Box sx={{ display: 'flex', gap: 0.5 }}>
+                      {taskLabels.slice(0, 2).map(l => (
+                          <Box key={l.id} sx={{ height: 4, width: 12, borderRadius: 2, bgcolor: l.color, opacity: 0.6 }} />
+                      ))}
+                  </Box>
+              )}
             </Box>
           </Box>
-
-          {/* Actions */}
-          <IconButton 
-            size="small" 
-            onClick={handleMenuClick}
-            sx={{ 
-              p: 0.5, 
-              color: '#404040',
-              opacity: isHovered ? 1 : 0,
-              transition: 'opacity 0.2s',
-              '&:hover': { color: '#F2F2F2' }
-            }}
-          >
-            <MoreIcon sx={{ fontSize: 16 }} />
-          </IconButton>
         </Box>
-      </Paper>
+      </Box>
 
       {/* Context Menu */}
       <Menu

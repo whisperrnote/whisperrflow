@@ -259,7 +259,7 @@ export default function TaskList() {
           >
             <ListItemText primaryTypographyProps={{ fontSize: '0.85rem', fontWeight: 600 }}>{option.label}</ListItemText>
             {sort.field === option.field && (
-                {sort.direction === 'asc' ? <AscIcon sx={{ fontSize: 16 }} /> : <DescIcon sx={{ fontSize: 16 }} />}
+                sort.direction === 'asc' ? <AscIcon sx={{ fontSize: 16 }} /> : <DescIcon sx={{ fontSize: 16 }} />
             )}
           </MenuItem>
         ))}
@@ -430,6 +430,4 @@ export default function TaskList() {
       </Box>
     </Box>
   );
-}
-
 }

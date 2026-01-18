@@ -41,13 +41,10 @@ export default function RightSidebar() {
         sx: {
           width: isMobile ? '100%' : DRAWER_WIDTH,
           maxWidth: '100vw',
-          borderLeft: isMobile ? 'none' : `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
-          boxShadow: isMobile 
-            ? 'none' 
-            : `-8px 0 32px ${alpha(theme.palette.common.black, 0.08)}`,
-          background: theme.palette.mode === 'light'
-            ? `linear-gradient(180deg, ${theme.palette.background.paper} 0%, ${alpha(theme.palette.primary.main, 0.02)} 100%)`
-            : theme.palette.background.paper,
+          borderLeft: '1px solid rgba(255, 255, 255, 0.08)',
+          boxShadow: '-10px 0 40px rgba(0, 0, 0, 0.5)',
+          backgroundColor: '#050505',
+          backgroundImage: 'none',
           zIndex: theme.zIndex.drawer + 2,
           backdropFilter: 'blur(20px)',
         },
