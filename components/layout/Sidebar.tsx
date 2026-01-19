@@ -105,32 +105,32 @@ export default function Sidebar() {
   ).length;
 
   const mainNav: NavItem[] = [
-    { id: 'dashboard', label: 'Dashboard', icon: <DashboardIcon />, href: '/dashboard' },
-    { id: 'tasks', label: 'Tasks', icon: <TasksIcon />, href: '/tasks' },
-    { id: 'calendar', label: 'Calendar', icon: <CalendarIcon />, href: '/calendar' },
-    { id: 'events', label: 'Events', icon: <EventIcon />, href: '/events' },
-    { id: 'focus', label: 'Focus Mode', icon: <FocusIcon />, href: '/focus' },
+    { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard size={20} strokeWidth={1.5} />, href: '/dashboard' },
+    { id: 'tasks', label: 'Tasks', icon: <CheckSquare size={20} strokeWidth={1.5} />, href: '/tasks' },
+    { id: 'calendar', label: 'Calendar', icon: <Calendar size={20} strokeWidth={1.5} />, href: '/calendar' },
+    { id: 'events', label: 'Events', icon: <Zap size={20} strokeWidth={1.5} />, href: '/events' },
+    { id: 'focus', label: 'Focus Mode', icon: <Flame size={20} strokeWidth={1.5} />, href: '/focus' },
   ];
 
   const smartLists: NavItem[] = [
-    { id: 'inbox', label: 'Inbox', icon: <InboxIcon />, badge: inboxCount },
-    { id: 'today', label: 'Today', icon: <EventIcon />, badge: todayCount, color: '#10b981' },
-    { id: 'upcoming', label: 'Upcoming', icon: <ScheduleIcon />, badge: upcomingCount, color: '#3b82f6' },
+    { id: 'inbox', label: 'Inbox', icon: <Inbox size={18} strokeWidth={1.5} />, badge: inboxCount },
+    { id: 'today', label: 'Today', icon: <Calendar size={18} strokeWidth={1.5} />, badge: todayCount, color: '#10b981' },
+    { id: 'upcoming', label: 'Upcoming', icon: <Clock size={18} strokeWidth={1.5} />, badge: upcomingCount, color: '#3b82f6' },
     {
       id: 'overdue',
       label: 'Overdue',
-      icon: <CalendarIcon />,
+      icon: <Calendar size={18} strokeWidth={1.5} />,
       badge: overdueCount,
       color: '#ef4444',
     },
-    { id: 'completed', label: 'Completed', icon: <CompletedIcon />, badge: completedCount },
+    { id: 'completed', label: 'Completed', icon: <CheckCircle2 size={18} strokeWidth={1.5} />, badge: completedCount },
   ];
 
   const viewModes: NavItem[] = [
-    { id: 'board', label: 'Board View', icon: <KanbanIcon /> },
-    { id: 'calendar', label: 'Calendar View', icon: <CalendarIcon /> },
-    { id: 'timeline', label: 'Timeline', icon: <TimelineIcon /> },
-    { id: 'matrix', label: 'Priority Matrix', icon: <MatrixIcon /> },
+    { id: 'board', label: 'Board View', icon: <Columns size={18} strokeWidth={1.5} /> },
+    { id: 'calendar', label: 'Calendar View', icon: <Calendar size={18} strokeWidth={1.5} /> },
+    { id: 'timeline', label: 'Timeline', icon: <BarChart3 size={18} strokeWidth={1.5} /> },
+    { id: 'matrix', label: 'Priority Matrix', icon: <Grid2X2 size={18} strokeWidth={1.5} /> },
   ];
 
   const handleSmartListClick = (id: string) => {
@@ -359,7 +359,7 @@ export default function Sidebar() {
             PROJECTS
           </Typography>
           <IconButton size="small" onClick={() => setProjectsOpen(!projectsOpen)} sx={{ color: 'text.disabled' }}>
-            {projectsOpen ? <ExpandLess sx={{ fontSize: 18 }} /> : <ExpandMore sx={{ fontSize: 18 }} />}
+            {projectsOpen ? <ChevronUp size={18} strokeWidth={1.5} /> : <ChevronDown size={18} strokeWidth={1.5} />}
           </IconButton>
         </Box>
 
