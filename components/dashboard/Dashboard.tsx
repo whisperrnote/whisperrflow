@@ -13,16 +13,16 @@ import {
   alpha,
 } from '@mui/material';
 import {
-  TrendingUp as TrendingUpIcon,
-  TrendingDown as TrendingDownIcon,
-  CheckCircle as CheckIcon,
-  AccessTime as ScheduleIcon,
-  Warning as WarningIcon,
-  Flag as FlagIcon,
-  ArrowForward as ArrowIcon,
-  Lightbulb as TipIcon,
-  Whatshot as StreakIcon,
-} from '@mui/icons-material';
+  TrendingUp,
+  TrendingDown,
+  CheckCircle,
+  Clock,
+  AlertTriangle,
+  Flag,
+  ArrowRight,
+  Lightbulb,
+  Flame,
+} from 'lucide-react';
 import { useTask } from '@/context/TaskContext';
 import { format, isToday, isTomorrow, isPast } from 'date-fns';
 import TaskItem from '@/components/tasks/TaskItem';
@@ -100,7 +100,7 @@ function StatCard({ title, value, subtitle, icon, color, trend, onClick }: StatC
             border: `1px solid ${alpha(color, 0.1)}`,
           }}
         >
-          {React.cloneElement(icon as React.ReactElement, { sx: { fontSize: 22 } })}
+          {React.cloneElement(icon as React.ReactElement, { size: 22, strokeWidth: 1.5 })}
         </Box>
       </Box>
     </Paper>
@@ -235,7 +235,7 @@ export default function Dashboard() {
             title="Due Today"
             value={todayTasks.length}
             subtitle={`${tomorrowTasks.length} pending tomorrow`}
-            icon={<ScheduleIcon />}
+            icon={<Clock />}
             color="#00F5FF"
             onClick={() => handleViewTasks('today')}
           />
@@ -245,7 +245,7 @@ export default function Dashboard() {
             title="Overdue"
             value={overdueTasks.length}
             subtitle="Immediate action required"
-            icon={<WarningIcon />}
+            icon={<AlertTriangle />}
             color="#FF4D4D"
             onClick={() => handleViewTasks('overdue')}
           />
@@ -255,7 +255,7 @@ export default function Dashboard() {
             title="In Progress"
             value={inProgressTasks.length}
             subtitle={`${urgentTasks.length} identified as urgent`}
-            icon={<FlagIcon />}
+            icon={<Flag />}
             color="#FFBD2E"
             onClick={() => handleViewTasks('in-progress')}
           />
@@ -265,7 +265,7 @@ export default function Dashboard() {
             title="Completed"
             value={completedTasks.length}
             subtitle={`${completionRate}% total efficiency`}
-            icon={<CheckIcon />}
+            icon={<CheckCircle />}
             color="#10B981"
           />
         </Grid>
@@ -288,7 +288,7 @@ export default function Dashboard() {
             >
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 3 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                  <FlagIcon sx={{ fontSize: 24, color: '#FF4D4D' }} />
+                  <Flag size={24} color="#FF4D4D" strokeWidth={1.5} />
                   <Typography variant="h3" sx={{ fontSize: '1.25rem' }}>
                     Critical Objectives
                   </Typography>
@@ -307,7 +307,7 @@ export default function Dashboard() {
                 </Box>
                 <Button
                   size="small"
-                  endIcon={<ArrowIcon sx={{ fontSize: 14 }} />}
+                  endIcon={<ArrowRight size={14} strokeWidth={1.5} />}
                   onClick={() => handleViewTasks('urgent')}
                   sx={{ color: 'text.disabled', fontWeight: 700, '&:hover': { color: '#F2F2F2' } }}
                 >
@@ -459,7 +459,7 @@ export default function Dashboard() {
             }}
           >
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
-              <TipIcon sx={{ fontSize: 20, color: '#00F5FF' }} />
+              <Lightbulb size={20} color="#00F5FF" strokeWidth={1.5} />
               <Typography variant="caption" sx={{ fontWeight: 900, color: '#00F5FF', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
                 NEURAL INSIGHT
               </Typography>
