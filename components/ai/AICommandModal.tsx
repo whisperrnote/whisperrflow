@@ -208,13 +208,13 @@ export default function AICommandModal({ open, onClose }: AICommandModalProps) {
       }}
     >
       <DialogTitle sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-        <AutoAwesomeIcon sx={{ color: theme.palette.secondary.main }} />
+        <Sparkles size={24} color={theme.palette.secondary.main} strokeWidth={1.5} />
         <Typography variant="h6" fontWeight={600}>
           AI Assistant
         </Typography>
         <Box sx={{ flexGrow: 1 }} />
         <IconButton onClick={handleClose} size="small">
-          <CloseIcon />
+          <X size={20} />
         </IconButton>
       </DialogTitle>
 
@@ -260,7 +260,7 @@ export default function AICommandModal({ open, onClose }: AICommandModalProps) {
                   display: 'flex',
                 }}
               >
-                <CheckCircleIcon sx={{ fontSize: 20 }} />
+                <CheckCircle2 size={20} />
               </Box>
               <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
@@ -268,7 +268,7 @@ export default function AICommandModal({ open, onClose }: AICommandModalProps) {
                     label={result.intent === 'create_task' ? 'Task' : 'Event'} 
                     color={result.intent === 'create_task' ? 'primary' : 'secondary'}
                     size="small"
-                    icon={result.intent === 'create_task' ? <CheckCircleIcon sx={{ fontSize: 16 }} /> : <EventIcon sx={{ fontSize: 16 }} />}
+                    icon={result.intent === 'create_task' ? <CheckCircle2 size={16} /> : <Calendar size={16} />}
                   />
                   <Typography variant="h6" component="div">
                     {result.data.title}
@@ -277,14 +277,14 @@ export default function AICommandModal({ open, onClose }: AICommandModalProps) {
                 
                 {result.data.description && (
                   <Box sx={{ display: 'flex', gap: 1, mt: 1, color: 'text.secondary' }}>
-                    <DescriptionIcon sx={{ fontSize: 20 }} />
+                    <FileText size={20} strokeWidth={1.5} />
                     <Typography variant="body2">{result.data.description}</Typography>
                   </Box>
                 )}
 
                 {(result.data.dueDate || result.data.startTime) && (
                   <Box sx={{ display: 'flex', gap: 1, mt: 1, color: 'text.secondary' }}>
-                    <ScheduleIcon sx={{ fontSize: 20 }} />
+                    <Clock size={20} strokeWidth={1.5} />
                     <Typography variant="body2">
                       {result.intent === 'create_task' && result.data.dueDate
                         ? new Date(result.data.dueDate).toLocaleString()
@@ -311,7 +311,7 @@ export default function AICommandModal({ open, onClose }: AICommandModalProps) {
             variant="contained"
             onClick={handleAnalyze}
             disabled={!prompt.trim() || isLoading}
-            startIcon={isLoading ? <CircularProgress size={20} color="inherit" /> : <AutoAwesomeIcon />}
+            startIcon={isLoading ? <CircularProgress size={20} color="inherit" /> : <Sparkles size={20} />}
             fullWidth
             sx={{
               borderRadius: 2,
