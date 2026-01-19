@@ -22,6 +22,7 @@
     "appwrite": "^21.4.0",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.25.0",
+    "lucide-react": "^0.562.0",
     "next": "16.0.4",
     "pino": "^10.1.0",
     "react": "19.2.0",
