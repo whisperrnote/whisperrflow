@@ -73,7 +73,7 @@ export default function FocusMode() {
         const duration = Math.floor(initialTime / 60);
         const prompt = `Refine the goal '${selectedTask.title}' into a specific, measurable objective for a ${duration}-minute session. Return ONLY the refined goal string.`;
         const result = await generate(prompt);
-        const refinedTitle = result.text.trim();
+        const refinedTitle = result.trim();
         updateTask(selectedTask.id, { title: refinedTitle });
     } catch (error) {
         console.error("Failed to refine goal", error);

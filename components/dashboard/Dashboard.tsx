@@ -335,7 +335,7 @@ export default function Dashboard() {
           >
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 3 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                <ScheduleIcon sx={{ fontSize: 24, color: '#00F5FF' }} />
+                <Clock size={24} color="#00F5FF" strokeWidth={1.5} />
                 <Typography variant="h2" sx={{ fontSize: '1.25rem' }}>
                     Active Track
                 </Typography>
@@ -354,7 +354,7 @@ export default function Dashboard() {
               </Box>
               <Button
                 size="small"
-                endIcon={<ArrowIcon sx={{ fontSize: 14 }} />}
+                endIcon={<ArrowRight size={14} strokeWidth={1.5} />}
                 onClick={() => handleViewTasks('today')}
                 sx={{ color: 'text.disabled', fontWeight: 700, '&:hover': { color: '#F2F2F2' } }}
               >
@@ -369,7 +369,7 @@ export default function Dashboard() {
               </Box>
             ) : (
               <Box sx={{ textAlign: 'center', py: 8, color: 'text.disabled', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <CheckIcon sx={{ fontSize: 48, marginBottom: 2, opacity: 0.1 }} />
+                <CheckCircle size={48} strokeWidth={1} style={{ marginBottom: 16, opacity: 0.1 }} />
                 <Typography variant="body2" sx={{ fontWeight: 600, letterSpacing: '0.05em' }}>SYSTEMS OPTIMIZED / NO PENDING TASKS</Typography>
                 <Button
                   variant="outlined"
@@ -436,7 +436,7 @@ export default function Dashboard() {
                   color: '#FFBD2E'
                 }}
               >
-                <StreakIcon sx={{ fontSize: 24 }} />
+                <Flame size={24} strokeWidth={1.5} />
               </Box>
               <Box>
                 <Typography variant="caption" sx={{ color: 'rgba(255, 189, 46, 0.7)', fontWeight: 800, letterSpacing: '0.05em', display: 'block', mb: 0.5 }}>
