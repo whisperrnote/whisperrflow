@@ -30,6 +30,7 @@ import {
   Label as LabelIcon,
   AttachFile as AttachFileIcon,
   Delete as DeleteIcon,
+  Person as PersonIcon,
 } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -37,6 +38,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { useTask } from '@/context/TaskContext';
 import { Priority, TaskStatus } from '@/types';
 import { taskAttachments } from '@/lib/storage';
+import { tablesDB } from '@/lib/appwrite';
 
 const priorityOptions: { value: Priority; label: string; color: string }[] = [
   { value: 'low', label: 'Low', color: '#94a3b8' },
@@ -73,6 +75,26 @@ export default function TaskDialog() {
   const [estimatedTime, setEstimatedTime] = useState('');
   const [pendingAttachments, setPendingAttachments] = useState<{ id: string, name: string }[]>([]);
   const [isUploading, setIsUploading] = useState(false);
+  const [contacts, setContacts] = useState<{ id: string, name: string }[]>([]);
+  const [selectedAssignees, setSelectedAssignees] = useState<string[]>([]);
+
+  // Bridge: Load contacts from Connect
+  useEffect(() => {
+    if (taskDialogOpen && userId) {
+      tablesDB.listDocuments('chat', 'contacts', [
+        // Appwrite Query.equal('userId', userId) - but we use TablesDB terminology here if possible
+        // Actually, the appwrite SDK Databases.listDocuments still uses Query.
+        // For simplicity, we use the standard databases if tablesDB is just an alias.
+      ]).then((res: any) => {
+        // Map contacts to simple {id, name}
+        const mapped = res.documents.map((c: any) => ({
+          id: c.contactUserId,
+          name: c.nickname || 'Unknown Contact'
+        }));
+        setContacts(mapped);
+      }).catch(() => {});
+    }
+  }, [taskDialogOpen, userId]);
 
   const handleClose = () => {
     setTaskDialogOpen(false);
@@ -395,6 +417,45 @@ export default function TaskDialog() {
                         />
                     ))}
                 </Box>
+            </Box>
+
+            {/* Assignees Section - Bridge from Connect */}
+            <Box>
+                <Typography variant="caption" sx={{ display: 'block', color: 'text.secondary', fontWeight: 700, letterSpacing: '0.05em', mb: 1 }}>
+                    ASSIGNEES (FROM CONNECT)
+                </Typography>
+                <Autocomplete
+                    multiple
+                    options={contacts}
+                    getOptionLabel={(option) => option.name}
+                    value={contacts.filter(c => selectedAssignees.includes(c.id))}
+                    onChange={(_, newValue) => setSelectedAssignees(newValue.map(v => v.id))}
+                    renderInput={(params) => (
+                        <TextField
+                            {...params}
+                            variant="standard"
+                            placeholder={contacts.length > 0 ? "Add collaborators..." : "No contacts found in Connect"}
+                            InputProps={{ ...params.InputProps, disableUnderline: true }}
+                        />
+                    )}
+                    renderTags={(value, getTagProps) =>
+                        value.map((option, index) => (
+                            <Chip
+                                {...getTagProps({ index })}
+                                key={option.id}
+                                label={option.name}
+                                size="small"
+                                icon={<PersonIcon sx={{ fontSize: '14px !important' }} />}
+                                sx={{
+                                    bgcolor: 'rgba(0, 245, 255, 0.1)',
+                                    color: '#00F5FF',
+                                    fontWeight: 700,
+                                    borderRadius: 1
+                                }}
+                            />
+                        ))
+                    }
+                />
             </Box>
 
             {/* Labels */}

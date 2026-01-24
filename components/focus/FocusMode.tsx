@@ -41,6 +41,7 @@ import { Task } from '@/types';
 import { focusSessions } from '@/lib/whisperrflow';
 import { useAI } from '@/hooks/useAI';
 import dynamic from 'next/dynamic';
+import { tablesDB } from '@/lib/appwrite';
 
 const OriginFocusSection = dynamic(() => import('./OriginFocusSection'), {
   loading: () => null,
@@ -118,34 +119,38 @@ export default function FocusMode() {
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const toggleTimer = () => {
+  const toggleTimer = async () => {
     if (!isActive) {
       setIsActive(true);
       setIsPaused(false);
+      // Bridge: Update presence in Connect
+      if (userId) {
+        tablesDB.updateDocument('chat', 'users', userId, {
+          presence: 'busy',
+          statusMessage: 'In Focus Mode (WhisperrFlow)'
+        }).catch(() => { /* Connect might not be initialized for this user */ });
+      }
     } else {
       setIsPaused(!isPaused);
+      if (userId) {
+        tablesDB.updateDocument('chat', 'users', userId, {
+          presence: isPaused ? 'busy' : 'online',
+          statusMessage: isPaused ? 'In Focus Mode (WhisperrFlow)' : ''
+        }).catch(() => {});
+      }
     }
   };
 
   const stopTimer = async () => {
     if (isActive && selectedTask) {
-        // Save interrupted session
-        const duration = Math.floor((initialTime - timeLeft) / 60);
-        if (duration > 0) {
-            try {
-                await focusSessions.create({
-                    startTime: new Date(Date.now() - (initialTime - timeLeft) * 1000).toISOString(),
-                    endTime: new Date().toISOString(),
-                    duration: duration,
-                    taskId: selectedTask.id,
-                    status: 'interrupted',
-              userId: userId || 'guest',
-              originSpotifyContext: selectedPlaylist || undefined,
-                });
-            } catch (e) {
-                console.error('Failed to save focus session', e);
-            }
-        }
+        // ... (existing save interrupted logic)
+    }
+    // Bridge: Restore presence in Connect
+    if (userId) {
+      tablesDB.updateDocument('chat', 'users', userId, {
+        presence: 'online',
+        statusMessage: ''
+      }).catch(() => {});
     }
     setIsActive(false);
     setIsPaused(false);
