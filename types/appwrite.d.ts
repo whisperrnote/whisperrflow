@@ -798,6 +798,7 @@ export type Events = Models.Row & {
     isCampGated?: boolean;
     campIpNftTokenId?: string;
     campMinteable?: boolean;
+    tags?: string[] | null;
 }
 
 export type EventGuests = Models.Row & {

@@ -103,6 +103,7 @@ export default function TaskDetails({ taskId }: TaskDetailsProps) {
   const [isGeneratingSubtasks, setIsGeneratingSubtasks] = useState(false);
 
   const handleAttachNote = async (noteId: string) => {
+    if (!task) return;
     setIsNoteModalOpen(false);
     const currentNotes = task.linkedNotes || [];
     if (currentNotes.includes(noteId)) return;
@@ -113,6 +114,7 @@ export default function TaskDetails({ taskId }: TaskDetailsProps) {
   };
 
   const handleAttachSecret = async (secretId: string) => {
+    if (!task) return;
     setIsSecretModalOpen(false);
     const tag = `source:whisperrkeep:${secretId}`;
     const currentTags = (task as any).labels || [];
@@ -133,12 +135,12 @@ export default function TaskDetails({ taskId }: TaskDetailsProps) {
       // Clean up markdown code blocks if present
       const jsonString = text.replace(/```json\n|\n```/g, '').replace(/```/g, '');
       const subtasks = JSON.parse(jsonString);
-      
+
       if (Array.isArray(subtasks)) {
         subtasks.forEach((st: string) => {
-            if (typeof st === 'string') {
-                addSubtask(task.id, st);
-            }
+          if (typeof st === 'string') {
+            addSubtask(task.id, st);
+          }
         });
       }
     } catch (error) {
@@ -150,10 +152,10 @@ export default function TaskDetails({ taskId }: TaskDetailsProps) {
 
   if (!task) {
     return (
-        <Box sx={{ p: 6, textAlign: 'center', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 2 }}>
-            <Typography variant="h6" color="text.secondary">Task details unavailable</Typography>
-            <Button variant="outlined" size="small" onClick={closeSecondarySidebar}>Go Back</Button>
-        </Box>
+      <Box sx={{ p: 6, textAlign: 'center', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 2 }}>
+        <Typography variant="h6" color="text.secondary">Task details unavailable</Typography>
+        <Button variant="outlined" size="small" onClick={closeSecondarySidebar}>Go Back</Button>
+      </Box>
     );
   }
 
@@ -230,7 +232,7 @@ export default function TaskDetails({ taskId }: TaskDetailsProps) {
             label={statusLabels[task.status]}
             size="small"
             onClick={(e) => setStatusAnchor(e.currentTarget)}
-            sx={{ 
+            sx={{
               cursor: 'pointer',
               bgcolor: 'rgba(255, 255, 255, 0.05)',
               border: '1px solid rgba(255, 255, 255, 0.1)',
@@ -265,13 +267,13 @@ export default function TaskDetails({ taskId }: TaskDetailsProps) {
               placeholder="Task title"
               autoFocus
               sx={{ mb: 2 }}
-              InputProps={{ 
-                sx: { 
-                    fontSize: '1.5rem', 
-                    fontWeight: 800, 
-                    fontFamily: 'var(--font-space-grotesk)',
-                    '&:before, &:after': { display: 'none' } 
-                } 
+              InputProps={{
+                sx: {
+                  fontSize: '1.5rem',
+                  fontWeight: 800,
+                  fontFamily: 'var(--font-space-grotesk)',
+                  '&:before, &:after': { display: 'none' }
+                }
               }}
             />
             <TextField
@@ -282,10 +284,10 @@ export default function TaskDetails({ taskId }: TaskDetailsProps) {
               value={editDescription}
               onChange={(e) => setEditDescription(e.target.value)}
               placeholder="Add more context..."
-              sx={{ 
+              sx={{
                 '& .MuiOutlinedInput-root': {
-                    bgcolor: 'rgba(255, 255, 255, 0.02)',
-                    fontSize: '0.9rem'
+                  bgcolor: 'rgba(255, 255, 255, 0.02)',
+                  fontSize: '0.9rem'
                 }
               }}
             />
@@ -326,28 +328,28 @@ export default function TaskDetails({ taskId }: TaskDetailsProps) {
           <Box>
             <Typography variant="subtitle2" sx={{ mb: 1 }}>Project</Typography>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                 <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: project?.color || '#00F5FF' }} />
-                 <Typography variant="body2" fontWeight={600}>{project?.name || 'Inbox'}</Typography>
+              <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: project?.color || '#00F5FF' }} />
+              <Typography variant="body2" fontWeight={600}>{project?.name || 'Inbox'}</Typography>
             </Box>
           </Box>
 
           {/* Priority */}
           <Box>
             <Typography variant="subtitle2" sx={{ mb: 1 }}>Priority</Typography>
-            <Box 
-                onClick={(e) => setPriorityAnchor(e.currentTarget)}
-                sx={{ 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    gap: 1, 
-                    cursor: 'pointer',
-                    '&:hover': { opacity: 0.8 }
-                }}
+            <Box
+              onClick={(e) => setPriorityAnchor(e.currentTarget)}
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1,
+                cursor: 'pointer',
+                '&:hover': { opacity: 0.8 }
+              }}
             >
-                 <FlagIcon sx={{ fontSize: 16, color: priorityColors[task.priority] }} />
-                 <Typography variant="body2" fontWeight={600} sx={{ color: priorityColors[task.priority] }}>
-                    {task.priority.toUpperCase()}
-                 </Typography>
+              <FlagIcon sx={{ fontSize: 16, color: priorityColors[task.priority] }} />
+              <Typography variant="body2" fontWeight={600} sx={{ color: priorityColors[task.priority] }}>
+                {task.priority.toUpperCase()}
+              </Typography>
             </Box>
           </Box>
 
@@ -355,34 +357,34 @@ export default function TaskDetails({ taskId }: TaskDetailsProps) {
           <Box>
             <Typography variant="subtitle2" sx={{ mb: 1 }}>Timeline</Typography>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'text.secondary' }}>
-                 <CalendarIcon sx={{ fontSize: 16 }} />
-                 <Typography variant="body2" fontWeight={500}>
-                    {task.dueDate ? format(new Date(task.dueDate), 'MMM d, yyyy') : 'Indefinite'}
-                 </Typography>
+              <CalendarIcon sx={{ fontSize: 16 }} />
+              <Typography variant="body2" fontWeight={500}>
+                {task.dueDate ? format(new Date(task.dueDate), 'MMM d, yyyy') : 'Indefinite'}
+              </Typography>
             </Box>
           </Box>
 
           {/* Labels */}
           {taskLabels.length > 0 && (
             <Box>
-                <Typography variant="subtitle2" sx={{ mb: 1 }}>Tags</Typography>
-                <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
-                    {taskLabels.map((label) => (
-                    <Chip
-                        key={label.id}
-                        label={label.name}
-                        size="small"
-                        sx={{
-                            height: 20,
-                            fontSize: '0.6rem',
-                            bgcolor: 'transparent',
-                            border: `1px solid ${alpha(label.color, 0.4)}`,
-                            color: label.color,
-                            fontWeight: 700,
-                        }}
-                    />
-                    ))}
-                </Box>
+              <Typography variant="subtitle2" sx={{ mb: 1 }}>Tags</Typography>
+              <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
+                {taskLabels.map((label) => (
+                  <Chip
+                    key={label.id}
+                    label={label.name}
+                    size="small"
+                    sx={{
+                      height: 20,
+                      fontSize: '0.6rem',
+                      bgcolor: 'transparent',
+                      border: `1px solid ${alpha(label.color, 0.4)}`,
+                      color: label.color,
+                      fontWeight: 700,
+                    }}
+                  />
+                ))}
+              </Box>
             </Box>
           )}
         </Box>
@@ -405,15 +407,15 @@ export default function TaskDetails({ taskId }: TaskDetailsProps) {
 
           {task.subtasks.length > 0 && (
             <Box sx={{ width: '100%', height: 4, bgcolor: 'rgba(255, 255, 255, 0.03)', borderRadius: 2, mb: 3, overflow: 'hidden' }}>
-                <Box 
-                    sx={{ 
-                        height: '100%', 
-                        width: `${subtaskProgress}%`, 
-                        bgcolor: '#00F5FF', 
-                        boxShadow: '0 0 10px rgba(0, 245, 255, 0.4)',
-                        transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)' 
-                    }} 
-                />
+              <Box
+                sx={{
+                  height: '100%',
+                  width: `${subtaskProgress}%`,
+                  bgcolor: '#00F5FF',
+                  boxShadow: '0 0 10px rgba(0, 245, 255, 0.4)',
+                  transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+                }}
+              />
             </Box>
           )}
 
@@ -448,9 +450,9 @@ export default function TaskDetails({ taskId }: TaskDetailsProps) {
                     onChange={() => toggleSubtask(task.id, subtask.id)}
                     size="small"
                     sx={{
-                        p: 0,
-                        color: 'rgba(255, 255, 255, 0.1)',
-                        '&.Mui-checked': { color: '#00F5FF' }
+                      p: 0,
+                      color: 'rgba(255, 255, 255, 0.1)',
+                      '&.Mui-checked': { color: '#00F5FF' }
                     }}
                   />
                 </ListItemIcon>
@@ -478,18 +480,18 @@ export default function TaskDetails({ taskId }: TaskDetailsProps) {
               variant="standard"
               onChange={(e) => setNewSubtask(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleAddSubtask()}
-              InputProps={{ 
+              InputProps={{
                 disableUnderline: true,
                 sx: { px: 1.5, fontSize: '0.85rem' }
               }}
             />
-            <IconButton 
-                size="small" 
-                onClick={handleGenerateSubtasks} 
-                disabled={isGeneratingSubtasks}
-                sx={{ color: '#00F5FF' }}
+            <IconButton
+              size="small"
+              onClick={handleGenerateSubtasks}
+              disabled={isGeneratingSubtasks}
+              sx={{ color: '#00F5FF' }}
             >
-                {isGeneratingSubtasks ? <CircularProgress size={16} color="inherit" /> : <AutoFixHighIcon sx={{ fontSize: 18 }} />}
+              {isGeneratingSubtasks ? <CircularProgress size={16} color="inherit" /> : <AutoFixHighIcon sx={{ fontSize: 18 }} />}
             </IconButton>
             <IconButton size="small" onClick={handleAddSubtask} disabled={!newSubtask.trim()} sx={{ color: '#F2F2F2' }}>
               <AddIcon sx={{ fontSize: 18 }} />
@@ -515,10 +517,10 @@ export default function TaskDetails({ taskId }: TaskDetailsProps) {
                   setIsNoteModalOpen(true);
                 }
               }}
-              sx={{ 
-                justifyContent: 'flex-start', 
-                border: '1px solid rgba(255, 255, 255, 0.05)', 
-                bgcolor: 'rgba(255, 255, 255, 0.01)', 
+              sx={{
+                justifyContent: 'flex-start',
+                border: '1px solid rgba(255, 255, 255, 0.05)',
+                bgcolor: 'rgba(255, 255, 255, 0.01)',
                 fontSize: '0.75rem',
                 color: (task.linkedNotes && task.linkedNotes.length > 0) ? '#00F5FF' : 'inherit'
               }}
@@ -546,10 +548,10 @@ export default function TaskDetails({ taskId }: TaskDetailsProps) {
                   setIsSecretModalOpen(true);
                 }
               }}
-              sx={{ 
-                justifyContent: 'flex-start', 
-                border: '1px solid rgba(255, 255, 255, 0.05)', 
-                bgcolor: 'rgba(255, 255, 255, 0.01)', 
+              sx={{
+                justifyContent: 'flex-start',
+                border: '1px solid rgba(255, 255, 255, 0.05)',
+                bgcolor: 'rgba(255, 255, 255, 0.01)',
                 fontSize: '0.75rem',
                 color: task.labels?.some(t => t.startsWith('source:whisperrkeep:')) ? '#FFD700' : 'inherit'
               }}
@@ -613,7 +615,7 @@ export default function TaskDetails({ taskId }: TaskDetailsProps) {
               onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleAddComment()}
               multiline
               maxRows={6}
-              InputProps={{ 
+              InputProps={{
                 disableUnderline: true,
                 sx: { fontSize: '0.9rem' }
               }}
