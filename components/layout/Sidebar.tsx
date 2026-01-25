@@ -25,7 +25,7 @@ import {
   DashboardOutlined as LayoutDashboardIcon,
   CheckCircleOutline as CheckSquareIcon,
   CalendarMonthOutlined as CalendarIcon,
-  ZapOutlined as ZapIcon,
+  BoltOutlined as ZapIcon,
   LocalFireDepartmentOutlined as FlameIcon,
   InboxOutlined as InboxIcon,
   AccessTimeOutlined as ClockIcon,
@@ -311,7 +311,7 @@ export default function Sidebar() {
                     color: item.color || '#A1A1AA',
                   }}
                 >
-                  {React.cloneElement(item.icon as React.ReactElement, { sx: { fontSize: 18 } } as any)}
+                  {item.icon}
                 </ListItemIcon>
                 <ListItemText
                   primary={item.label}
@@ -359,7 +359,7 @@ export default function Sidebar() {
             PROJECTS
           </Typography>
           <IconButton size="small" onClick={() => setProjectsOpen(!projectsOpen)} sx={{ color: 'text.disabled' }}>
-            {projectsOpen ? <ChevronUp size={18} strokeWidth={1.5} /> : <ChevronDown size={18} strokeWidth={1.5} />}
+            {projectsOpen ? <ChevronUpIcon sx={{ fontSize: 18 }} /> : <ChevronDownIcon sx={{ fontSize: 18 }} />}
           </IconButton>
         </Box>
 
