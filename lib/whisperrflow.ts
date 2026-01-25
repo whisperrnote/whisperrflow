@@ -132,13 +132,22 @@ export const focusSessions = {
 };
 
 // --- Notes ---
-// Notes are not managed in WhisperrFlow, but we keep the export for potential read-only integration later
-/*
+
 export const notes = {
-    list: (queries?: string[]) => listRows<Note>(TABLES.NOTES, queries),
-    create: (data: TableCreateData<Note>) => createRow<Note>(TABLES.NOTES, data),
-    get: (id: string) => getRow<Note>(TABLES.NOTES, id),
-    update: (id: string, data: TableUpdateData<Note>) => updateRow<Note>(TABLES.NOTES, id, data),
-    delete: (id: string) => deleteRow(TABLES.NOTES, id)
+    list: (queries?: string[]) => tablesDB.listRows({ 
+        databaseId: APPWRITE_CONFIG.NOTE_DATABASE_ID, 
+        tableId: TABLES.NOTES, 
+        queries 
+    }),
+    get: (id: string) => tablesDB.getRow({
+        databaseId: APPWRITE_CONFIG.NOTE_DATABASE_ID,
+        tableId: TABLES.NOTES,
+        rowId: id
+    }),
+    update: (id: string, data: any) => tablesDB.updateRow({
+        databaseId: APPWRITE_CONFIG.NOTE_DATABASE_ID,
+        tableId: TABLES.NOTES,
+        rowId: id,
+        data
+    })
 };
-*/
