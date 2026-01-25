@@ -114,8 +114,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const checkSession = useCallback(async (retryCount = 0) => {
     try {
+      // Step 1: Check hint
+      const hint = typeof window !== 'undefined' ? sessionStorage.getItem('whisperr_auth_hint') : null;
+      if (hint === 'true' && !retryCount) {
+        console.log('Optimistic flow hint detected');
+      }
+
       const currentUser = await account.get();
       setUser(currentUser);
+      sessionStorage.setItem('whisperr_auth_hint', 'true');
 
       // Sync to Global Identity Directory (WhisperrConnect)
       try {
@@ -138,6 +145,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         window.history.replaceState({}, '', url.toString());
       }
     } catch (error: any) {
+      sessionStorage.removeItem('whisperr_auth_hint');
       // Check for auth=success signal in URL - this means we just came from IDM
       const hasAuthSignal = typeof window !== 'undefined' && window.location.search.includes('auth=success');
 

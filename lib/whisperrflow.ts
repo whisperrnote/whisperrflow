@@ -8,11 +8,11 @@ const { DATABASE_ID, TABLES } = APPWRITE_CONFIG;
 export { realtime };
 
 export function subscribeToTable<T extends Models.Row>(
-    tableId: string, 
+    tableId: string,
     callback: (event: { type: 'create' | 'update' | 'delete', payload: T }) => void
 ) {
     const channel = `databases.${DATABASE_ID}.collections.${tableId}.documents`;
-    
+
     return realtime.subscribe(channel, (response) => {
         const payload = response.payload as T;
         let type: 'create' | 'update' | 'delete' | null = null;
@@ -29,47 +29,74 @@ export function subscribeToTable<T extends Models.Row>(
 
 type TableCreateData<T extends Models.Row> =
     T extends Models.DefaultRow
-        ? Partial<Models.Row> & Record<string, unknown>
-        : Partial<Models.Row> & Omit<T, keyof Models.Row>;
+    ? Partial<Models.Row> & Record<string, unknown>
+    : Partial<Models.Row> & Omit<T, keyof Models.Row>;
 type TableUpdateData<T extends Models.Row> =
     T extends Models.DefaultRow
-        ? Partial<Models.Row> & Record<string, unknown>
-        : Partial<Models.Row> & Partial<Omit<T, keyof Models.Row>>;
+    ? Partial<Models.Row> & Record<string, unknown>
+    : Partial<Models.Row> & Partial<Omit<T, keyof Models.Row>>;
+
+const queryCache = new Map<string, { data: any; expires: number }>();
+const CACHE_TTL = 30000;
 
 async function listRows<T extends Models.Row>(tableId: string, queries?: string[]): Promise<Models.RowList<T>> {
-    return await tablesDB.listRows<T>({ databaseId: DATABASE_ID, tableId, queries });
+    const key = `list:${tableId}:${JSON.stringify(queries)}`;
+    const cached = queryCache.get(key);
+    if (cached && cached.expires > Date.now()) return cached.data;
+
+    const res = await tablesDB.listRows<T>({ databaseId: DATABASE_ID, tableId, queries });
+    queryCache.set(key, { data: res, expires: Date.now() + CACHE_TTL });
+    return res;
 }
 
 async function createRow<T extends Models.Row>(
-    tableId: string, 
-    data: TableCreateData<T>, 
+    tableId: string,
+    data: TableCreateData<T>,
     permissions?: string[],
     rowId: string = ID.unique()
 ): Promise<T> {
-    return await tablesDB.createRow<T>({
+    const res = await tablesDB.createRow<T>({
         databaseId: DATABASE_ID,
         tableId,
         rowId,
         data,
         permissions
     });
+    clearCache(tableId);
+    return res;
 }
 
 async function getRow<T extends Models.Row>(tableId: string, rowId: string): Promise<T> {
-    return await tablesDB.getRow<T>({
+    const key = `get:${tableId}:${rowId}`;
+    const cached = queryCache.get(key);
+    if (cached && cached.expires > Date.now()) return cached.data;
+
+    const res = await tablesDB.getRow<T>({
         databaseId: DATABASE_ID,
         tableId,
         rowId
     });
+    queryCache.set(key, { data: res, expires: Date.now() + CACHE_TTL });
+    return res;
+}
+
+function clearCache(tableId: string) {
+    for (const key of queryCache.keys()) {
+        if (key.includes(`:${tableId}:`)) {
+            queryCache.delete(key);
+        }
+    }
 }
 
 async function updateRow<T extends Models.Row>(tableId: string, rowId: string, data: TableUpdateData<T>): Promise<T> {
-    return await tablesDB.updateRow<T>({
+    const res = await tablesDB.updateRow<T>({
         databaseId: DATABASE_ID,
         tableId,
         rowId,
         data
     });
+    clearCache(tableId);
+    return res;
 }
 
 async function deleteRow(tableId: string, rowId: string): Promise<void> {
@@ -78,6 +105,7 @@ async function deleteRow(tableId: string, rowId: string): Promise<void> {
         tableId,
         rowId
     });
+    clearCache(tableId);
 }
 
 // --- Calendars ---
@@ -104,7 +132,7 @@ export const tasks = {
 
 export const events = {
     list: (queries?: string[]) => listRows<Event>(TABLES.EVENTS, queries),
-    create: (data: TableCreateData<Event>, permissions?: string[]) => 
+    create: (data: TableCreateData<Event>, permissions?: string[]) =>
         createRow<Event>(TABLES.EVENTS, data, permissions),
     get: (id: string) => getRow<Event>(TABLES.EVENTS, id),
     update: (id: string, data: TableUpdateData<Event>) => updateRow<Event>(TABLES.EVENTS, id, data),
@@ -134,10 +162,10 @@ export const focusSessions = {
 // --- Notes ---
 
 export const notes = {
-    list: (queries?: string[]) => tablesDB.listRows({ 
-        databaseId: APPWRITE_CONFIG.NOTE_DATABASE_ID, 
-        tableId: TABLES.NOTES, 
-        queries 
+    list: (queries?: string[]) => tablesDB.listRows({
+        databaseId: APPWRITE_CONFIG.NOTE_DATABASE_ID,
+        tableId: TABLES.NOTES,
+        queries
     }),
     get: (id: string) => tablesDB.getRow({
         databaseId: APPWRITE_CONFIG.NOTE_DATABASE_ID,
@@ -155,10 +183,10 @@ export const notes = {
 // --- Secrets (Keep) ---
 
 export const secrets = {
-    list: (queries?: string[]) => tablesDB.listRows({ 
-        databaseId: 'passwordManagerDb', 
-        tableId: 'credentials', 
-        queries 
+    list: (queries?: string[]) => tablesDB.listRows({
+        databaseId: 'passwordManagerDb',
+        tableId: 'credentials',
+        queries
     }),
     get: (id: string) => tablesDB.getRow({
         databaseId: 'passwordManagerDb',
