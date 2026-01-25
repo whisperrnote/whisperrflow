@@ -90,6 +90,7 @@ export interface Task {
   updatedAt: Date;
   position: number; // for ordering
   isArchived: boolean;
+  metadata?: string; // Appwrite document metadata
   // Ecosystem integration fields
   linkedNotes?: string[]; // WhisperrNote integration
   linkedEvents?: string[]; // WhisperrEvents integration
