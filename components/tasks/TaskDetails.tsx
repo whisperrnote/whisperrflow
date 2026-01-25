@@ -483,15 +483,10 @@ export default function TaskDetails({ taskId }: TaskDetailsProps) {
               size="small"
               startIcon={<NotesIcon sx={{ fontSize: 16 }} />}
               onClick={() => {
-                if (task.metadata) {
-                  try {
-                    const meta = JSON.parse(task.metadata);
-                    if (meta.sourceApp === 'whisperrnote' && meta.sourceId) {
-                      window.open(`https://note.whisperrnote.space/notes?openNoteId=${meta.sourceId}`, '_blank');
-                    }
-                  } catch (e) {
-                    console.error('Failed to parse task metadata', e);
-                  }
+                const sourceTag = task.labels?.find(t => t.startsWith('source:whisperrnote:'));
+                if (sourceTag) {
+                  const noteId = sourceTag.split(':')[2];
+                  window.open(`https://note.whisperrnote.space/notes?openNoteId=${noteId}`, '_blank');
                 }
               }}
               sx={{ 
@@ -499,10 +494,10 @@ export default function TaskDetails({ taskId }: TaskDetailsProps) {
                 border: '1px solid rgba(255, 255, 255, 0.05)', 
                 bgcolor: 'rgba(255, 255, 255, 0.01)', 
                 fontSize: '0.75rem',
-                color: task.metadata && JSON.parse(task.metadata).sourceApp === 'whisperrnote' ? '#00F5FF' : 'inherit'
+                color: task.labels?.some(t => t.startsWith('source:whisperrnote:')) ? '#00F5FF' : 'inherit'
               }}
             >
-              {task.metadata && JSON.parse(task.metadata).sourceApp === 'whisperrnote' ? 'View Source' : 'Link Note'}
+              {task.labels?.some(t => t.startsWith('source:whisperrnote:')) ? 'View Source' : 'Link Note'}
             </Button>
             <Button
               variant="outlined"

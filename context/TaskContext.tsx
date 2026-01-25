@@ -464,35 +464,45 @@ export function TaskProvider({ children }: TaskProviderProps) {
   useEffect(() => {
     if (!state.userId) return;
 
-    // Subscribe to Tasks
-    const unsubscribeTasks = subscribeToTable<AppwriteTask>(APPWRITE_CONFIG.TABLES.TASKS, ({ type, payload }) => {
-      if (payload.userId !== state.userId) return;
+    let unsubTasks: any;
+    let unsubProjects: any;
 
-      if (type === 'create') {
-        dispatch({ type: 'ADD_TASK', payload: mapAppwriteTaskToTask(payload) });
-      } else if (type === 'update') {
-        dispatch({ type: 'UPDATE_TASK', payload: { id: payload.$id, updates: mapAppwriteTaskToTask(payload) } });
-      } else if (type === 'delete') {
-        dispatch({ type: 'DELETE_TASK', payload: payload.$id });
-      }
-    });
+    const initRealtime = async () => {
+      // Subscribe to Tasks
+      unsubTasks = await subscribeToTable<AppwriteTask>(APPWRITE_CONFIG.TABLES.TASKS, ({ type, payload }) => {
+        if (payload.userId !== state.userId) return;
 
-    // Subscribe to Calendars/Projects
-    const unsubscribeProjects = subscribeToTable<AppwriteCalendar>(APPWRITE_CONFIG.TABLES.CALENDARS, ({ type, payload }) => {
-      if (payload.userId !== state.userId) return;
+        if (type === 'create') {
+          dispatch({ type: 'ADD_TASK', payload: mapAppwriteTaskToTask(payload) });
+        } else if (type === 'update') {
+          dispatch({ type: 'UPDATE_TASK', payload: { id: payload.$id, updates: mapAppwriteTaskToTask(payload) } });
+        } else if (type === 'delete') {
+          dispatch({ type: 'DELETE_TASK', payload: payload.$id });
+        }
+      });
 
-      if (type === 'create') {
-        dispatch({ type: 'ADD_PROJECT', payload: mapAppwriteCalendarToProject(payload) });
-      } else if (type === 'update') {
-        dispatch({ type: 'UPDATE_PROJECT', payload: { id: payload.$id, updates: mapAppwriteCalendarToProject(payload) } });
-      } else if (type === 'delete') {
-        dispatch({ type: 'DELETE_PROJECT', payload: payload.$id });
-      }
-    });
+      // Subscribe to Calendars/Projects
+      unsubProjects = await subscribeToTable<AppwriteCalendar>(APPWRITE_CONFIG.TABLES.CALENDARS, ({ type, payload }) => {
+        if (payload.userId !== state.userId) return;
+
+        if (type === 'create') {
+          dispatch({ type: 'ADD_PROJECT', payload: mapAppwriteCalendarToProject(payload) });
+        } else if (type === 'update') {
+          dispatch({ type: 'UPDATE_PROJECT', payload: { id: payload.$id, updates: mapAppwriteCalendarToProject(payload) } });
+        } else if (type === 'delete') {
+          dispatch({ type: 'DELETE_PROJECT', payload: payload.$id });
+        }
+      });
+    };
+
+    initRealtime();
 
     return () => {
-      unsubscribeTasks();
-      unsubscribeProjects();
+      if (typeof unsubTasks === 'function') unsubTasks();
+      else if (unsubTasks?.unsubscribe) unsubTasks.unsubscribe();
+      
+      if (typeof unsubProjects === 'function') unsubProjects();
+      else if (unsubProjects?.unsubscribe) unsubProjects.unsubscribe();
     };
   }, [state.userId]);
 

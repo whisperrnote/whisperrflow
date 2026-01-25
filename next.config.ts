@@ -15,8 +15,8 @@ const config: NextConfig = {
     }
     return config;
   },
+  reactCompiler: true,
   experimental: {
-    reactCompiler: true,
     optimizePackageImports: [
       '@mui/material',
       '@mui/icons-material',

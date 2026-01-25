@@ -7,9 +7,14 @@ export function useRealtimeTable<T extends Models.Row>(
     onEvent: (event: { type: 'create' | 'update' | 'delete', payload: T }) => void
 ) {
     useEffect(() => {
-        const unsubscribe = subscribeToTable<T>(tableId, onEvent);
+        let unsub: any;
+        const init = async () => {
+            unsub = await subscribeToTable<T>(tableId, onEvent);
+        };
+        init();
         return () => {
-            unsubscribe();
+            if (typeof unsub === 'function') unsub();
+            else if (unsub?.unsubscribe) unsub.unsubscribe();
         };
     }, [tableId, onEvent]);
 }
