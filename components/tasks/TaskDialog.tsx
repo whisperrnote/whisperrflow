@@ -21,6 +21,7 @@ import {
   useTheme,
   alpha,
   Autocomplete,
+  CircularProgress,
 } from '@mui/material';
 import {
   Close as CloseIcon,
@@ -158,11 +159,18 @@ export default function TaskDialog() {
       estimatedTime: estimatedTime ? parseInt(estimatedTime, 10) : undefined,
       subtasks: [],
       comments: [],
-      attachments: pendingAttachments.map(a => a.id),
+      attachments: pendingAttachments.map(a => ({
+        id: a.id,
+        name: a.name,
+        url: '', // Will be hydrated by service/maper if needed
+        type: 'file',
+        size: 0,
+        uploadedAt: new Date()
+      })),
       reminders: [],
       timeEntries: [],
-      assigneeIds: ['user-1'],
-      creatorId: 'user-1',
+      assigneeIds: selectedAssignees,
+      creatorId: userId || 'guest',
       isArchived: false,
     });
 
