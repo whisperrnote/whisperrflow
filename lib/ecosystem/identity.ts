@@ -60,7 +60,7 @@ export async function ensureGlobalIdentity(user: any, force = false) {
 
                 for (const field of avatarFieldCandidates) {
                     try {
-                        const payload = { ...baseData };
+                        const payload: any = { ...baseData };
                         if (profilePicId) payload[field] = profilePicId;
 
                         profile = await tablesDB.createRow({

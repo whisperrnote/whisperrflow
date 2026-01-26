@@ -67,11 +67,11 @@ export interface TimeEntry {
 export interface Task {
   id: string;
   title: string;
-  description?: string;
+  description?: string | null;
   status: TaskStatus;
   priority: Priority;
-  projectId?: string;
-  parentTaskId?: string;
+  projectId?: string | null;
+  parentTaskId?: string | null;
   labels: string[];
   subtasks: Subtask[];
   comments: Comment[];
